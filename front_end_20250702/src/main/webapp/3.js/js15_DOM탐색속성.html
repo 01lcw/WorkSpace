@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>js15_DOM탐색_속성</title>
+<script type="text/javascript">
+/*
+dom객체 종류
+- document: 문서에 접근할때 사용 -> 문서 객체
+- element: tag에 접근할 때 사용 -> 태그 객체
+	ex) document.getElement...(직접선택방식)
+- Atrribute: 속성에 접근할 때 사용 -> 속성 객체
+		(id, class, title, style, value...)
+- text: text를 객체로 정의 -> <p>text</p> -> text객
+- node: html을 구성하는 모든 요소를 정의
+var ele = new Element(); (x) -> get메서드 통해 얻어오는 방식
+
+객체를 생성하는 방법
+1. dom탐색 메서드를 이용(직접선택)
+2. dom탐색 속성을 이용(간접선택: 관계성)
+	- parentNode속성 : 타겟 요소의 부모요소를 구하는 속성(반환타입 node)
+	- parentElement속성 : 동일한 기능(반환타입 Element) 
+	
+	- childNodes속성 : 타겟 요소의 자식요소들을 구하는 속성(반환타입 node)
+	- children속성 : 동일한 기능(반환타입 element)
+	
+	- previousSibling/netSibling : 형제 요소를 구함(반환타입 node)
+	- previousElementSibling/nextElementSibling(반환타입 element)
+3.create 메서드를 이용하는 방법
+	- createElement(): tag
+	- createAttribute(): 속성
+	- createTextNode(): text
+	
+*/
+	onload=function(){
+		const btnEle = document.querySelectorAll("button");
+		
+		btnEle[0].onclick=()=>{
+			const child02=document.querySelectorAll("div > p")[1];
+			
+			console.log(child02.tagName);
+			console.log(child02.nodeName);
+			
+			const div=child02.parentNode;
+			console.log(div.nodeName);// 요소의 이름을 출력
+			div.style.backgroundColor="yellow;"
+			
+//			const divEle=child02.parentElement;
+			console.log(divEle.tagName);
+		}
+		//자식요소 찾기
+		btnEle[1].onclick=()=>{
+			const div=document.querySelectorAll("div")[0];
+			
+			const divCn=div.childNodes;// [p,p,p]
+			console.log(divCn.length);
+			divCn[3].style.color="red";
+			
+			//element를 대상으로 할 경우
+			const divEle=div.children;// [p,p,p]
+			console.log(divEle.length);
+			divEle[1].style.backgroundColor="blue";
+		}
+		btnEle[2].onclick=()=>{
+			const div=document.querySelectorAll("div")[0];
+			const fci=div.firstChild; // node반환
+			const lci=div.lastChild; // node 반환
+			console.log(fci.nodeName, lci.nodeName);
+		}
+		btnEle[3].onclick=()=>{
+			const child02=document.querySelectorAll("div > p")[1];
+			//element반환 메서드
+			const preP=child02.previousElementSibling;
+			const nextP=child02.nextElementSibling;
+			console.log(preP.textContent, nextP.textContent);
+		}
+	}
+</script>
+</head>
+<body>
+	<div>
+		<p>child01</p>
+		<p>child02</p>
+		<p>child03</p>
+	</div>
+	<button>부모탐색</button>
+	<button>자식탐색</button>
+	<button>자식탐색2</button>
+	<button>형제탐색</button>
+</body>
+</html>

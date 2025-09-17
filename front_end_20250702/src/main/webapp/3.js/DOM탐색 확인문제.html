@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DOM탐색 확인문제</title>
+<script type="text/javascript">
+	function testSearch(){
+		const test01=document.getElementById("a");
+		const div=test01.parentNode;
+		div.style.backgroundColor="red";
+		const test02=document.getElementById("b");
+		const t2=test02.childNodes[3];
+		t2.style.fontSize="20pt";
+	}
+	function testSibling(){
+		document.querySelectorAll(".sub")[0].nextElementSibling.firstElementChild.textContent="첫번째요소";
+	}
+	
+	onload=()=>{
+		const span=document.getElementByClassName("sub");
+		//getEle...(): 반환객체 -> 유사배열 객체: HTMLCollection타입 -> Array객체X
+		//querySelector..(): 
+		span.forEach(()=>{// 사용 못함
+			
+		});
+		for (var i = 0; i < span.length; i++) {
+			span[i].onclick=(e)=>{
+				e.target.enxtElementSibling.firstElementChild.textContent="첫번째요소";
+			}
+			
+		}
+		
+	}
+</script>
+</head>
+<body>
+	<h1>1. test01태그(id='a')를 포함한 div태그의 배경색을 적용하세요(parentNode속성사용)</h1>
+	<h1>2. id="b"인 div태그에 포함된 test04태그의 폰트 크기를 20pt로
+		적용하세요(childNodes사용)</h1>
+	<div onclick="testSearch()" style="width: 100px; background: yellow;">적용하기</div>
+	<hr />
+	<div>
+		<p id="a">test01</p>
+		<p>test02</p>
+	</div>
+	<div id="b">
+		<p>test03</p>
+		<p>test04</p>
+	</div>
+	<h1>3.목록에서 &lt;li&gt;test08&lt;/li&gt; 요소를
+		&lt;li&gt;첫번째요소&lt;/li&gt;로 바꾸시오
+		(nextElementSibling,firstElementChild사용): class="sub"인 태그 첫번째가 타겟임</h1>
+	<div onclick="testSibling()" style="width: 100px; background: yellow;">적용하기</div>
+	<ul>
+		<li>test05</li>
+		<li>test06</li>
+		<li><span class="sub">test07</span>
+			<ul>
+				<li>test08</li>
+				<li>test09</li>
+				<li>test10</li>
+				<li>test11</li>
+				<li>test12</li>
+			</ul></li>
+		<li><span class="sub">test08</span>
+			<ul>
+				<li>test13</li>
+				<li>test14</li>
+				<li>test15</li>
+				<li>test16</li>
+				<li>test17</li>
+			</ul></li>
+	</ul>
+</body>
+</html>
