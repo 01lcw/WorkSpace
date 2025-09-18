@@ -1,4 +1,4 @@
-<%-- <%@ include file="header.jsp" %> --%>
+<%@ include file="header.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%request.setCharacterEncoding("utf-8"); %>
@@ -42,6 +42,8 @@
 		
 		if(chkID.checked){//체크가 됐다면 쿠키에 id값을 저장
 			setCookie("rememberid",id,100);
+		}else{
+			removeCookie("rememberid");
 		}
 	}
 	
@@ -49,8 +51,12 @@
 	onload=function(){
 		const cookieID=getCookie("rememberid");
 		if(cookieID!=null){
+			//저장된 id가 있다면, id입력박스에 해당 id를 입력
 			document.querySelectorAll("input[name=id]")[0]
 								.value=cookieID;
+			//저장된 id가 있다면 id체크박스에 체크되게 함
+			document.querySelectorAll("input[type=checkbox]")[0]
+								.checked=true;
 		}
 	}
 	

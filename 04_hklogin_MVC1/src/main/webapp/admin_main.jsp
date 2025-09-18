@@ -1,35 +1,28 @@
-<%@page import="com.hk.dtos.UserDto"%>
-<%@ include file="header.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%request.setCharacterEncoding("utf-8"); %>
+<%@ include file="header.jsp" %>
+<%request.setCharacterEncoding("UTF-8"); %>
 <%response.setContentType("text/html;charset=UTF-8"); %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<style type="text/css">
-/* 	.main{ */
-/* 		padding:10px; */
-/* 		font-size: 15pt; */
-/* 	} */
-/* 	.main a{ */
-/* 		text-decoration: none; */
-/* 	}     */
-</style>
+<title>관리자페이지</title>
 </head>
 <body>
-<%-- <% UserDto ldto=(UserDto)session.getAttribute("ldto"); %> --%>
+
 <div id="container">
 	<div class="main">
 		<div>
 			<span>
 			<%=ldto.getId()%>[<%=ldto.getRole()%>]
-			님이 로그인 하였습니다.
+			님이 로그인 함.
 			</span>
 			<span>
-				<a href="userController.jsp?command=userinfo&id=<%=ldto.getId()%>">나의 정보</a>
+				<a href="adminController.jsp?command=admin_listAll">회원 전체 조회</a>
+			</span>|
+			<span>
+				<a href="userController.jsp?command=admin_userRoleForm">회원정보(등급)수정</a>
 			</span>|
 			<span>
 				<a href="userController.jsp?command=logout">로그아웃</a>
@@ -37,6 +30,7 @@
 		</div>
 	</div>
 </div>
+<h1>관리자 페이지</h1>
 </body>
 </html>
 <%@ include file="footer.jsp" %>
