@@ -25,15 +25,19 @@
 	<div class="main">
 		<div>
 			<span>
-			<%=ldto.getId()%>[<%=ldto.getRole()%>]
-			님이 로그인 하였습니다.
+			로그인 아이디: 
+			<%=ldto.getTID()%> [<%=ldto.getTROLE()%>]
 			</span>
-			<span>
-				<a href="userController.jsp?command=userinfo&id=<%=ldto.getId()%>">나의 정보</a>
-			</span>|
 			<span>
 				<a href="userController.jsp?command=logout">로그아웃</a>
+			</span> |
+			<span>
+				<a href="userController.jsp?command=userinfo&id=<%=ldto.getTID()%>">나의 정보</a>
+			</span> |
+			<span>
+				<a href="userController.jsp?command=boardlist">게시판</a>
 			</span>
+			
 		</div>
 	</div>
 </div>

@@ -1,6 +1,6 @@
-<%@page import="com.hk.dtos.UserDto"%>
+<%@page import="com.hk.board.dtos.UserDto"%>
 <%@page import="java.util.List"%>
-<%@page import="com.hk.daos.AdminDao"%>
+<%@page import="com.hk.board.daos.AdminDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%request.setCharacterEncoding("utf-8"); %>
@@ -23,13 +23,29 @@
 
 	AdminDao dao=AdminDao.getAdminDao();
 	
-	if("admin_listAll".equals(command)) {
-	    List<UserDto> list = dao.getAllUserList();  // DAO에서 데이터 조회
-	    request.setAttribute("userList", list);     // JSP로 전달
-	    RequestDispatcher rd = request.getRequestDispatcher("admin_listAll.jsp");
-	    rd.forward(request, response);              // forward 사용
+	if(command.equals("userlistall")){
+		List<UserDto>list=dao.getAllUserList();
+		request.setAttribute("list", list);
+		pageContext.forward("admin_listAll.jsp");
+	}else if(command.equals("userlist")){
+		List<UserDto>list=dao.getUserList();
+		request.setAttribute("list", list);
+		pageContext.forward("admin_list.jsp");
+	}else if(command.equals("userrole")){
+		String id=request.getParameter("id");
+		UserDto dto=dao.getUserRole(id);
+		request.setAttribute("dto", dto);
+		pageContext.forward("admin_userRoleForm.jsp");
+	}else if(command.equals("updaterole")){
+		String id=request.getParameter("id");
+		String role=request.getParameter("role");
+		boolean isS=dao.getUpdateRole(id,role);
+		if(isS){
+			response.sendRedirect("adminController.jsp?command=userlist");
+		}else{
+			response.sendRedirect("error.jsp");
+		}
 	}
-	
 %>
 </body>
 </html>

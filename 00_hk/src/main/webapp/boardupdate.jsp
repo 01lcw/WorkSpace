@@ -16,20 +16,20 @@ response.setContentType("text/html;charset=UTF-8");
 </head>
 <%
 //전송된 파라미터를 받기
-	String sseq=request.getParameter("seq");
-	int seq=Integer.parseInt(sseq);
+	String Tsseq=request.getParameter("seq");
+	int Tseq=Integer.parseInt(Tsseq);
 	String title=request.getParameter("title");
 	String content=request.getParameter("content");
 	
 	HkDao dao=new HkDao();
 
-	boolean isS=dao.updateBoard(new HkDto(seq,title,content));
+	boolean isS=dao.updateBoard(new HkDto(Tseq,title,content));
 	
 	if(isS){
 %>
 		<script type="text/javascript">
 			alert("글을 수정했습니다");
-			location.href="boarddetail.jsp?seq=<%=seq%>";
+			location.href="boarddetail.jsp?seq=<%=Tseq%>";
 		</script>
 		<%
 	}else{

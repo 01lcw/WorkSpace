@@ -1,3 +1,6 @@
+<%@page import="com.hk.board.dtos.HkDto"%>
+<%@page import="java.util.List"%>
+<%@page import="com.hk.board.daos.HkDao"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="com.hk.board.dtos.UserDto"%>
 <%@page import="com.hk.board.daos.UserDao"%>
@@ -13,20 +16,23 @@
 </head>
 <body>
 <%
+
 	//요청값을 받기
 	String command=request.getParameter("command");
 
 	//싱글톤 패턴 : 클래스명.메서드 (static메서드 호출 방법)
 	UserDao dao=UserDao.getUserDao();
-	
+	HkDao hkdao =new HkDao();
+
 	//어떤 요청인지 확인-> 해당코드를 실행
 	if(command.equals("registform")){//회원가입폼이동
 		response.sendRedirect("registform.jsp");
-	}else if(command.equals("insertuser")){//회원가입하기
+	}else if(command.equals("insertUser")){//회원가입하기
 		//회원정보 파라미터 받기
 		String id=request.getParameter("id");
 		String name=request.getParameter("name");
 		String password=request.getParameter("password");
+		String phone=request.getParameter("phone");
 // 		String address=request.getParameter("address");
 
 		//주소 API 활용: 파라미터 받기 ----------------------
@@ -39,8 +45,7 @@
 		
 		String email=request.getParameter("email");
 		
-		boolean isS=dao.insertUser(
-				   new UserDto(id,name,password,address,email));
+		boolean isS = dao.insertUser(new UserDto(id,name,password,address,phone,email));
 		if(isS){
 			%>
 			<script type="text/javascript">
@@ -69,7 +74,7 @@
 		//id와 pw에 해당하는 회원정보 조회
 		UserDto dto=dao.getLogin(id, password);
 		
-		if(dto==null||dto.getId()==null){//회원이 존재하지 않는다면
+		if(dto==null||dto.getTID()==null){//회원이 존재하지 않는다면
 			response.sendRedirect("index.jsp?msg="
 			      +URLEncoder.encode("회원가입을 해주세요","utf-8"));
 		}else{
@@ -79,11 +84,11 @@
 			session.setMaxInactiveInterval(10*60);//10분간 유지
 			
 			//등급[ADMIN,MANAGER,USER]을 확인해서 해당 Main페이지로 이동하기
-			if(dto.getRole().toUpperCase().equals("ADMIN")){
+			if(dto.getTROLE().toUpperCase().equals("ADMIN")){
 				response.sendRedirect("admin_main.jsp");
-			}else if(dto.getRole().toUpperCase().equals("MANAGER")){
+			}else if(dto.getTROLE().toUpperCase().equals("MANAGER")){
 				response.sendRedirect("manager_main.jsp");
-			}else if(dto.getRole().toUpperCase().equals("USER")){
+			}else if(dto.getTROLE().toUpperCase().equals("USER")){
 				response.sendRedirect("user_main.jsp");
 			}
 		}
@@ -150,6 +155,97 @@
 			</script>
 			<%
 		}
+	}
+//  게시판 기능 -------------------------------------------------------------아 그냥 따로 만들걸	
+	else if(command.equals("boardlist")){
+		List<HkDto> list= hkdao.getAllList();//DB로부터 글목록 데이터 가져오기
+		
+		//6단계:Scope 객체에 담기
+		//request스코프: 객체 전달범위 
+		// 요청페이지 ----> 응답페이지
+		request.setAttribute("list", list);//["list":list]
+		
+		//7단계: 페이지 응답(이동)
+		pageContext.forward("boardlist.jsp");
+	}else if(command.equals("insertboardform")){//글쓰기폼요청
+		response.sendRedirect("insertboardform.jsp");
+	}else if(command.equals("insertboard")){//글추가하기
+		//id, title, content
+		String Tid=request.getParameter("id");
+		String Ttitle=request.getParameter("title");
+		String Tcontent=request.getParameter("content");
+		
+		boolean isS=hkdao.insertBoard(new HkDto(Tid,Ttitle,Tcontent));
+		if(isS){
+	//새로 다시 요청을 해서 응답하기 때문에 주소창이 업데이트 된다.
+	response.sendRedirect("userController.jsp?command=boardlist");
+	//글추가할때 요청 주소가 남아있어서 새로고침하면 글이 계속 추가된다.
+// 			pageContext.forward("boardController.jsp?command=boardlist");
+		}else{
+	response.sendRedirect("error.jsp");
+		}
+	}else if(command.equals("boarddetail")){//상세보기
+		//전달된 파라미터 받기
+		String Tsseq=request.getParameter("seq");
+		int Tseq=Integer.parseInt(Tsseq);//"5"->정수 5 변환
+		
+		HkDto dto=hkdao.getBoard(Tseq);//db에서 글하나에 대한 정보가져오기
+		//dto객체를 boarddeatil.jsp로 전달해야 함
+		request.setAttribute("dto", dto);
+		pageContext.forward("boarddetail.jsp");
+	}else if(command.equals("boardupdateform")){
+		//수정폼 이동
+		//전달된 파라미터 받기
+		String Tsseq=request.getParameter("seq");
+		int Tseq=Integer.parseInt(Tsseq);//"5"->정수 5 변환
+		
+		HkDto dto=hkdao.getBoard(Tseq);//db에서 글하나에 대한 정보가져오기
+		//dto객체를 boardupdateform.jsp로 전달해야 함
+		request.setAttribute("dto", dto);
+		pageContext.forward("boardupdateform.jsp");
+	}else if(command.equals("boardupdate")){
+		//수정하기
+		String Tsseq=request.getParameter("seq");
+		int Tseq=Integer.parseInt(Tsseq);
+		String Ttitle=request.getParameter("title");
+		String Tcontent=request.getParameter("content");
+		
+		boolean isS=hkdao.updateBoard(new HkDto(Tseq,Ttitle,Tcontent));
+		if(isS){
+	response.sendRedirect("userController.jsp?"
+	             +"command=boarddetail&seq="+Tseq);
+		}else{
+	response.sendRedirect("error.jsp");
+		}
+	}else if(command.equals("boarddelete")){
+		//삭제하기
+		String Tsseq=request.getParameter("seq");
+		int Tseq=Integer.parseInt(Tsseq);
+		boolean isS=hkdao.deleteBoard(Tseq);
+		if(isS){
+	response.sendRedirect("userController.jsp?command=boardlist");
+		}else{
+	response.sendRedirect("error.jsp");
+		}
+		
+		
+	}else if(command.equals("muldel")){
+		//여러글 삭제
+		// 전달받는 파라미터: 동일한 name으로 여러개의 값이 전달되는 상황
+	    //   url -> boardController.jsp?seq=5,6,7,8
+// 		request.getParameter("seq");// 해당 name에 대한 값 1개를 받는다
+		String[] seqs=request.getParameterValues("seq");//여러개의 값을 받아 배열로 반환
+		boolean isS=hkdao.mulDel(seqs);
+		if(isS){
+	response.sendRedirect("userController.jsp?command=boardlist");
+		}else{
+	response.sendRedirect("error.jsp");
+		}
+	}else if(command.equals("search")){ //아이디 검색
+		String tid = request.getParameter("tid");
+		List<HkDto> list = hkdao.getSearchBoard(tid);
+        request.setAttribute("list", list);
+        pageContext.forward("boardlist.jsp");
 	}
 %>
 </body>

@@ -4,9 +4,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
+p
+
 request.setCharacterEncoding("UTF-8");
 %>
 <%
+p
+
 response.setContentType("text/html;charset=UTF-8");
 %>
 <!DOCTYPE html>
@@ -21,6 +25,8 @@ response.setContentType("text/html;charset=UTF-8");
 </script>
 </head>
 <%
+p
+
 	HkDao dao=new HkDao();
 	List<HkDto> list=dao.getAllList();//list[dto,dto,dto...]
 %>

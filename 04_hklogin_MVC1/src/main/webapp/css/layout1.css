@@ -12,3 +12,12 @@
 	width: 600px;
 	margin:0px auto;
 }
+
+.admin_content{
+	width: 1200px;
+	margin:0px auto;
+}
+
+.admin_content .userRole{
+	width:600px;
+}

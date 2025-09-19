@@ -1,13 +1,13 @@
-package com.hk.daos;
+package com.hk.board.daos;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.hk.board.dtos.RoleStatus;
+import com.hk.board.dtos.UserDto;
 import com.hk.datasource.Database;
-import com.hk.dtos.RoleStatus;
-import com.hk.dtos.UserDto;
 
 // 싱글톤 패턴 : 객체를 한번만 생성해서 사용하자
 public class UserDao extends Database{

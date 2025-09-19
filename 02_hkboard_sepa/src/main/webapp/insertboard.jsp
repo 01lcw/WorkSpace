@@ -2,8 +2,14 @@
 <%@page import="com.hk.board.daos.HkDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%request.setCharacterEncoding("UTF-8"); %>
-<%response.setContentType("text/html;charset=UTF-8"); %>
+<%
+p
+request.setCharacterEncoding("UTF-8")
+%>
+<%
+p
+response.setContentType("text/html;charset=UTF-8")
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,6 +18,8 @@
 </head>
 <body>
 <%
+p
+
 	//전달되는 파라미터의 이름을 확인해야 함
 	// id='hk'&title='제목'&content='내용'
 	String id=request.getParameter("id");

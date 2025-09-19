@@ -1,4 +1,4 @@
-package com.hk.dtos;
+package com.hk.board.dtos;
 
 import java.io.Serializable;
 import java.util.Date;

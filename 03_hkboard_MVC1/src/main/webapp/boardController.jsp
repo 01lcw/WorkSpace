@@ -3,8 +3,14 @@
 <%@page import="com.hk.board.daos.HkDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%request.setCharacterEncoding("utf-8"); %>
-<%response.setContentType("text/html;charset=UTF-8"); %>
+<%
+
+request.setCharacterEncoding("utf-8");
+%>
+<%
+
+response.setContentType("text/html;charset=UTF-8");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +19,7 @@
 </head>
 <body>
 <%
-	//1단계:command값 받기 -> 어떤 요청인지 확인 값 받기
+//1단계:command값 받기 -> 어떤 요청인지 확인 값 받기
 	//    -요청값: 별도의 command라는 값을 전달
 	//    -요청url: boardlist.board  :MVC2방식일때
 	String command=request.getParameter("command");
@@ -45,12 +51,12 @@
 		
 		boolean isS=dao.insertBoard(new HkDto(id,title,content));
 		if(isS){
-			//새로 다시 요청을 해서 응답하기 때문에 주소창이 업데이트 된다.
-			response.sendRedirect("boardController.jsp?command=boardlist");
-			//글추가할때 요청 주소가 남아있어서 새로고침하면 글이 계속 추가된다.
+	//새로 다시 요청을 해서 응답하기 때문에 주소창이 업데이트 된다.
+	response.sendRedirect("boardController.jsp?command=boardlist");
+	//글추가할때 요청 주소가 남아있어서 새로고침하면 글이 계속 추가된다.
 // 			pageContext.forward("boardController.jsp?command=boardlist");
 		}else{
-			response.sendRedirect("error.jsp");
+	response.sendRedirect("error.jsp");
 		}
 	}else if(command.equals("boarddetail")){//상세보기
 		//전달된 파라미터 받기
@@ -80,10 +86,10 @@
 		
 		boolean isS=dao.updateBoard(new HkDto(seq,title,content));
 		if(isS){
-			response.sendRedirect("boardController.jsp?"
-					             +"command=boarddetail&seq="+seq);
+	response.sendRedirect("boardController.jsp?"
+	             +"command=boarddetail&seq="+seq);
 		}else{
-			response.sendRedirect("error.jsp");
+	response.sendRedirect("error.jsp");
 		}
 	}else if(command.equals("boarddelete")){
 		//삭제하기
@@ -91,9 +97,9 @@
 		int seq=Integer.parseInt(sseq);
 		boolean isS=dao.deleteBoard(seq);
 		if(isS){
-			response.sendRedirect("boardController.jsp?command=boardlist");
+	response.sendRedirect("boardController.jsp?command=boardlist");
 		}else{
-			response.sendRedirect("error.jsp");
+	response.sendRedirect("error.jsp");
 		}
 		
 		
@@ -105,9 +111,9 @@
 		String[] seqs=request.getParameterValues("seq");//여러개의 값을 받아 배열로 반환
 		boolean isS=dao.mulDel(seqs);
 		if(isS){
-			response.sendRedirect("boardController.jsp?command=boardlist");
+	response.sendRedirect("boardController.jsp?command=boardlist");
 		}else{
-			response.sendRedirect("error.jsp");
+	response.sendRedirect("error.jsp");
 		}
 	}
 %>
