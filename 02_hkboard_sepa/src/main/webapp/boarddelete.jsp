@@ -2,12 +2,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-p
-request.setCharacterEncoding("utf-8")
+
+request.setCharacterEncoding("utf-8");
 %>
 <%
-p
-response.setContentType("text/html;charset=UTF-8")
+
+response.setContentType("text/html;charset=UTF-8");
 %>
 <!DOCTYPE html>
 <html>
@@ -17,7 +17,7 @@ response.setContentType("text/html;charset=UTF-8")
 </head>
 <body>
 <%
-p
+
   //삭제할 게시글의 seq값을 받는다.
 	String sseq=request.getParameter("seq");
 	int seq=Integer.parseInt(sseq);

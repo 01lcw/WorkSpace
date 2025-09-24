@@ -3,12 +3,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-p
-request.setCharacterEncoding("utf-8")
+
+request.setCharacterEncoding("utf-8");
 %>
 <%
-p
-response.setContentType("text/html;charset=UTF-8")
+
+response.setContentType("text/html;charset=UTF-8");
 %>
 <!DOCTYPE html>
 <html>
@@ -17,7 +17,6 @@ response.setContentType("text/html;charset=UTF-8")
 <title>게시판 상세보기</title>
 </head>
 <%
-p
 
 	//전달된 파라미터 받기
 	String sseq=request.getParameter("seq");
