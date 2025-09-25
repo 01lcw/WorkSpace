@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- namespace속성: 반드시 정의를 하자 -->
+<mapper namespace="com.hk.board.dao">
+  <select id="boardlist" resultType="AnsDto">
+    SELECT SEQ,ID,TITLE,CONTENT,REGDATE 
+    FROM ANSWERBOARD
+  </select>
+  <insert id="insertboard" parameterType="AnsDto">
+  INSERT INTO answerboard
+	VALUES(NULL,#{id},#{title},#{content},SYSDATE(),
+	(SELECT nVL(MAX(REFER),0)+1 FROM ANSWERBOARD),
+	0,0,0,'N')
+  </insert>
+</mapper>
