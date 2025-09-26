@@ -19,7 +19,7 @@ import com.hk.board.dtos.UserDto;
 
 
 
-@WebServlet("*.board")
+@WebServlet("*.admin")
 public class AdminController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;

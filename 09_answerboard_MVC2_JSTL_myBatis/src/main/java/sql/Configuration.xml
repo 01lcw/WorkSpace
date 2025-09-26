@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+
 <configuration>
 <!-- DB 접속정보 파일 경로 설정 -->
-  <propertis resource="sql/db.properties" />
+  <properties resource="sql/db.properties" />
   
  <!-- 변수설정 -->
  <typeAliases>
