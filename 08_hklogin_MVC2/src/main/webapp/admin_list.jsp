@@ -17,9 +17,9 @@
 		<div class="main">
 			<div>
 				<span> ${ldto.id}[${ldto.role }] 님이 로그인 하였습니다. </span> <span>
-					<a href="userlistall.board">회원전체조회</a>
-				</span>| <span> <a href="userlist.board">회원정보[등급]수정</a>
-				</span>| <span> <a href="logout.board">로그아웃</a>
+					<a href="userlistall.admin">회원전체조회</a>
+				</span>| <span> <a href="userlist.admin">회원정보[등급]수정</a>
+				</span>| <span> <a href="logout.admin">로그아웃</a>
 				</span>
 			</div>
 		</div>
@@ -40,7 +40,7 @@
 							<td>${dto.id}</td>
 							<td>${dto.name}</td>
 							<td>${dto.role} <c:if test="${dto.id ne ldto.id}">
-									<a href="userrole.board?id=${dto.id}" class="btn btn-info"
+									<a href="userrole.admin?id=${dto.id}" class="btn btn-info"
 										style="margin-left: 20px;">변경</a>
 								</c:if>
 							</td>

@@ -19,10 +19,10 @@
 			님이 로그인 하였습니다.
 			</span>
 			<span>
-				<a href="userinfo.board?id=${ldto.id}">나의 정보</a>
+				<a href="userinfo.user?id=${ldto.id}">나의 정보</a>
 			</span>
 			<span>
-				<a href="logout.board">로그아웃</a>
+				<a href="logout.user">로그아웃</a>
 			</span>
 		</div>
 	</div>
@@ -32,7 +32,7 @@
 	
 		<h1>사용자 페이지</h1>
 		<div id="myinfo">
-			<form action="userupdate.board" method="post">
+			<form action="userupdate.user" method="post">
 				<input type="hidden" name="id" value="${dto.id}"/>
 				<table border="1" class="table table-striped table-hover">
 					<tr>
@@ -70,7 +70,7 @@
 <script type="text/javascript">
 	function delUser(id){
 		if(confirm("정말 탈퇴하시겠습니까?")){
-			location.href="deluser.board?id="+id;
+			location.href="deluser.user?id="+id;
 		}
 	}
 </script>

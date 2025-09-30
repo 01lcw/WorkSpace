@@ -1,7 +1,7 @@
-<jsp:include page="header.jsp"/>
+<jsp:include page="header.jsp"  />
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%request.setCharacterEncoding("UTF-8"); %>
+<%request.setCharacterEncoding("utf-8"); %>
 <%response.setContentType("text/html;charset=UTF-8"); %>
 <!DOCTYPE html>
 <html>
@@ -10,7 +10,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<a href="boardlist.board">글목록</a>
+<a href="boardlist.board?pnum=1">글목록</a>
 </body>
 </html>
-<jsp:include page="footer.jsp"/>
+<jsp:include page="footer.jsp"  />

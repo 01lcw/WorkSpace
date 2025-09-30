@@ -2,33 +2,99 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
+
 <!-- namespace속성: 반드시 정의를 하자 -->
 <mapper namespace="com.hk.board.dao">
 
-  <select id="boardlist" resultType="AnsDto">
-    SELECT SEQ,ID,TITLE,CONTENT,REGDATE ,
-    		REFER, STEP, DEPTH, READCOUNT, DELFLAG
-    FROM ANSWERBOARD
-    ORDER BY REFER DESC, STEP ASC
-  </select>
-  
-  <insert id="insertboard" parameterType="AnsDto" >
-  	insert into answerboard
-	values(null,'hk','제목','내용',sysdate(),
-	(select nvl(max(refer),0)+1 from answerboard alias_for_subquery),
-	0,0,0,'N');
-  </insert>
-  
-  <select id="getboard" parameterType="Integer" resultType="AnsDto">
-  	SELECT SEQ,ID,TITLE,CONTENT,REGDATE
-  	FROM ANSWERBOARD
-  	WHERE SEQ=#{seq}
-  </select>
-  
-  <!-- 조회수 -->
-  <update id="readcount" parameterType="Integer">
-  	UPDATE ANSWERBOARD SET READCOUNT = READCOUNT+1
-  	WHERE SEQ = #{seq}
-  </update>
+	<!-- <select id="boardlist" resultType="AnsDto">
+		SELECT SEQ,ID,TITLE,CONTENT,REGDATE,
+		REFER, STEP, DEPTH, READCOUNT, DELFLAG
+		FROM ANSWERBOARD
+		ORDER BY REFER DESC, STEP ASC
+	</select> -->
+	
+	<select id="boardlist" parameterType="Map" resultType="AnsDto">
+		select rn, seq, id, title, content, regdate,
+		readcount, refer, step, depth, delflag
+		from
+		(select row_number() over(order by refer desc, step)
+		rn, seq, id, title, content, regdate,
+		readcount, refer, step, depth, delflag
+		from answerboard)a
+		where ceil(rn/10) = #{pnum}
+	</select>
+
+	<select id="getpcount" resultType="int">
+		select ceil(count(*)/10)
+		from answerboard
+	</select>
+	
+	<insert id="insertboard" parameterType="AnsDto">
+		insert into answerboard
+		values(null,#{id},#{title},#{content},sysdate(),
+		(select nvl(max(refer),0)+1 from answerboard alias_for_subquery),
+		0,0,0,'N');
+	</insert>
+
+	<select id="getboard" parameterType="Integer"
+		resultType="AnsDto">
+		SELECT SEQ,ID,TITLE,CONTENT,REGDATE
+		FROM ANSWERBOARD
+		<include refid="seqParam" />
+
+	</select>
+
+	<!-- 조회수 -->
+	<update id="readcount" parameterType="Integer">
+		UPDATE ANSWERBOARD SET READCOUNT = READCOUNT+1
+		<include refid="seqParam" />
+	</update>
+
+	<!-- 수정하기 -->
+	<update id="boardupdate" parameterType="Map">
+		UPDATE ANSWERBOARD SET TITLE=#{title}, CONTENT=#{content}
+		<include refid="seqParam" />
+	</update>
+
+	<!-- 삭제하기: delflag = Y update 실행 -->
+	<update id="boarddelete" parameterType="Integer">
+		UPDATE ANSWERBOARD SET DELFLAG='Y'
+		<include refid="seqParam" />
+	</update>
+
+	<!-- 공통 쿼리 한번 작성하고 필요한곳에서 사용 -->
+	<sql id="seqParam">
+		WHERE SEQ=#{seq}
+	</sql>
+
+	<!-- 여러글 삭제하기: 동적쿼리 사용하기 : parameter는 Map("seqs":array[1,2,3]) -->
+	<!-- 동적쿼리사용할때 전달하는 파라미터는 Map으로 전달하자 -->
+	<!-- UPDATE ANSWERBOARD SET DELFLAG='Y' WHERE SEQ IN (1,2,3,4,5) -->
+	<update id="muldel" parameterType="Map">
+		UPDATE ANSWERBOARD SET DELFLAG='Y'
+		WHERE SEQ IN
+		<foreach collection="seqs" item="seq" open="(" close=")"
+			separator=",">
+			#{seq}
+		</foreach>
+	</update>
+
+	<!-- 답글달기 -->
+	<update id="replyupdate" parameterType="AnsDto">
+  <![CDATA[
+  		update answerboard set step=step+1
+		where refer=(select refer from answerboard where seq=#{seq})
+		and step > (select step from answerboard where seq=#{seq})
+  ]]>
+	</update>
+
+	<insert id="replyinsert" parameterType="AnsDto">
+		insert into answerboard
+		values(null, #{id} , #{title}, #{content}, sysdate(),
+		(select refer from answerboard alias_for_subquery where seq=#{seq}),
+		(select step from answerboard alias_for_subquery where seq=#{seq})+1,
+		(select depth from answerboard alias_for_subquery where seq=#{seq})+1,
+		0,'N')
+	</insert>
+
 </mapper>

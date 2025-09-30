@@ -17,10 +17,10 @@
 			님이 로그인 하였습니다.
 			</span>
 			<span>
-				<a href="userinfo.board?id=${sessionScope.ldto.id}">나의 정보</a>
+				<a href="userinfo.user?id=${sessionScope.ldto.id}">나의 정보</a>
 			</span> |
 			<span>
-				<a href="logout.board">로그아웃</a>
+				<a href="logout.user">로그아웃</a>
 			</span>
 		</div>
 	</div>

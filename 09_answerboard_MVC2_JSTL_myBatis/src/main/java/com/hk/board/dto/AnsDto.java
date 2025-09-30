@@ -17,9 +17,13 @@ import lombok.ToString;
 @ToString
 public class AnsDto {
 	
-	public AnsDto(int i, String id, String title, String content) {
-		// TODO Auto-generated constructor stub
+	public AnsDto(int seq, String id, String title, String content) {
+	    this.seq = seq;
+	    this.id = id;
+	    this.title = title;
+	    this.content = content;
 	}
+
 	
 	public AnsDto() {
 		
@@ -34,6 +38,7 @@ public class AnsDto {
 	private int depth;
 	private String readCount;
 	private String delflag;
+	
 	public AnsDto(Integer seq, String id, String title, String content, Date regDate, int refer, int step, int depth,
 			String readCount, String delflag) {
 		super();
@@ -48,6 +53,8 @@ public class AnsDto {
 		this.readCount = readCount;
 		this.delflag = delflag;
 	}
+	
+	
 
 	public AnsDto(Integer seq, String id, String title, String content) {
 		super();

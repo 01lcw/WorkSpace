@@ -47,6 +47,8 @@
 </script>
 </head>
 <body>
+<div id="container">
+<jsp:useBean id="util" class="com.hk.board.util.Util" />
 <h1>게시판</h1>
 <h2>글목록</h2>
 <form action="muldel.board" method="post" onsubmit="return isAllCheck()">
@@ -77,7 +79,26 @@
 					<td><input class="form-check-input" type="checkbox" name="seq" value="${dto.seq}" /></td>
 					<td>${dto.seq}</td>
 					<td>${dto.id}</td>
-					<td><a href="boarddetail.board?seq=${dto.seq}&review=y">${dto.title}</a></td>
+					<td>
+						<c:choose>
+							<c:when test="${dto.delflag=='Y'}">
+								---삭제된 글입니다.---
+							</c:when>
+							<c:otherwise>
+<%-- 								<jsp:setProperty property="arrowNbsp" name="util" value="${dto.depth}"/> --%>
+<%-- 								<jsp:getProperty property="arrowNbsp" name="util"/> --%>
+								<c:forEach begin="1" end="${dto.depth}" var="i" step="1">
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<c:if test="${i==dto.depth}">
+										<img src="img/arrow.png" width="15px" height="15px"/>
+									</c:if>
+								</c:forEach>
+								<a href="boarddetail.board?seq=${dto.seq}&review=y">
+									${fn:length(dto.title)>10?fn:substring(dto.title,0,10)+='...':dto.title}
+								</a>							
+							</c:otherwise>
+						</c:choose>
+					</td>
 					<td><fmt:formatDate value="${dto.regDate}" 
 										pattern="yyyy년 MM월 dd일"/> </td> 
 					<td>${dto.readCount}</td>
@@ -91,6 +112,22 @@
 	</c:choose>
 	<tr>
 		<td colspan="10">
+<%-- 			<c:forEach begin="1" end="${pcount}" var="i" step="1"> --%>
+<%-- 				<a href="boardlist.board?pnum=${i}">${i}|</a> --%>
+<%-- 			</c:forEach> --%>
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-center">
+				  <li class="page-item"><a class="page-link" href="boardlist.board?pnum=${pMap.prePageNum}">Previous</a></li>
+				  <c:forEach begin="${pMap.startPage}" end="${pMap.endPage}" var="i" step="1">
+				 	 <li class="page-item"><a class="page-link" href="boardlist.board?pnum=${i}">${i}</a></li>
+				  </c:forEach>
+				  <li class="page-item"><a class="page-link" href="boardlist.board?pnum=${pMap.nextPageNum}">Next</a></li>
+				</ul>
+			</nav>					
+		</td>
+	</tr>
+	<tr>
+		<td colspan="10">
 			<button class="btn btn-primary" type="button" onclick="insertBoardForm()">글추가</button>	
 			<button class="btn btn-primary" type="submit">글삭제</button>
 			<span id="msg"></span>
@@ -98,6 +135,7 @@
 	</tr>
 </table>
 </form>
+</div>
 </body>
 </html>
 <jsp:include page="footer.jsp"/>

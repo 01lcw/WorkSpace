@@ -18,9 +18,9 @@
 		<div class="main">
 			<div>
 				<span> ${ldto.id}[${ldto.role }] 님이 로그인 하였습니다. </span> <span>
-					<a href="userlistall.board">회원전체조회</a>
-				</span>| <span> <a href="userlist.board">회원정보[등급]수정</a>
-				</span>| <span> <a href="logout.board">로그아웃</a>
+					<a href="userlistall.admin">회원전체조회</a>
+				</span>| <span> <a href="userlist.admin">회원정보[등급]수정</a>
+				</span>| <span> <a href="logout.admin">로그아웃</a>
 				</span>
 			</div>
 		</div>

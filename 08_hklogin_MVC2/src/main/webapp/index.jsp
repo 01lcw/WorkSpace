@@ -11,7 +11,7 @@
 </head>
 <body>
 <div id="container" style="width: 500px;margin:100px auto;">
-	<form class="form-control" action="login.board" method="post" onsubmit="userIdCookie()">
+	<form class="form-control" action="login.user" method="post" onsubmit="userIdCookie()">
 		<h1>Login</h1>
 		<input class="form-control mb-2" type="text" name="id" placeholder="ID" 
 									 required="required"/>
@@ -26,7 +26,7 @@
 </div>
 <script type="text/javascript">
 	function registForm(){
-		location.href="registform.board";
+		location.href="registform.user";
 	}
 	
 	//아이디를 쿠키에 저장하기

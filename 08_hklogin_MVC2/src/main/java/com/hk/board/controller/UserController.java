@@ -56,9 +56,9 @@ public class UserController extends HttpServlet {
 
 		UserDao dao=new UserDao();
 	
-		if(command.equals("/registform.board")) {
+		if(command.equals("/registform.user")) {
 			response.sendRedirect("registform.jsp");
-		}else if(command.equals("/insertuser.board") ) {
+		}else if(command.equals("/insertuser.user") ) {
 			String id=request.getParameter("id");
 			String name=request.getParameter("name");
 			String password=request.getParameter("password");
@@ -81,23 +81,23 @@ public class UserController extends HttpServlet {
 //					alert("회원에 가입이 되셨습니다.");
 //					location.href="index.jsp";
 //				</script>
-				jsResponse("index.board", "회원에 가입이 되셨습니다.", response);
+				jsResponse("index.user", "회원에 가입이 되셨습니다.", response);
 				
 			}else{
 //				<script type="text/javascript">
 //					alert("회원가입실패");
 //					location.href="error.jsp";
 //				</script>
-				jsResponse("error.board", "회원가입실패", response);
+				jsResponse("error.user", "회원가입실패", response);
 			}
 			
-		}else if(command.equals("/idchk.board")) {
+		}else if(command.equals("/idchk.user")) {
 			String id=request.getParameter("id");
 			String resultId=dao.idCheck(id);//결과값이 null이면 사용가능
 			
 			request.setAttribute("resultId", resultId);
 			dispatch("idchkform.jsp", request, response);
-		}else if(command.equals("/login.board")) {
+		}else if(command.equals("/login.user")) {
 			String id=request.getParameter("id");
 			String password=request.getParameter("password");
 			
@@ -122,10 +122,10 @@ public class UserController extends HttpServlet {
 					response.sendRedirect("user_main.jsp");
 				}
 			}
-		}else if(command.equals("/logout.board")) {
+		}else if(command.equals("/logout.user")) {
 			session.invalidate();//session의 모든 정보 삭제
 			response.sendRedirect("index.jsp");
-		}else if(command.equals("/userinfo.board")){//회원상세조회
+		}else if(command.equals("/userinfo.user")){//회원상세조회
 			//로그인할때 select문 모든 정보조회로 구현
 			// --> 나의정보 조회할때도 활용하는 경우가 있음
 			//    --> sessoin에 저장하고 그 정보를 사용 --> 이렇게 사용하면 안됨
@@ -137,7 +137,7 @@ public class UserController extends HttpServlet {
 			request.setAttribute("dto", dto);
 			//이동한다.
 			dispatch("userinfo.jsp", request, response);
-		}else if(command.equals("/userupdate.board")){
+		}else if(command.equals("/userupdate.user")){
 			String id=request.getParameter("id");
 			String address=request.getParameter("address");
 			String email=request.getParameter("email");
@@ -150,7 +150,7 @@ public class UserController extends HttpServlet {
 //					location.href
 //					="userController.jsp?command=userinfo&id=<%=id%>";
 //				</script>
-				jsResponse("userinfo.board?id="+id, "수정완료", response);
+				jsResponse("userinfo.user?id="+id, "수정완료", response);
 			}else{
 //				<script type="text/javascript">
 //					alert("수정실패");
@@ -159,7 +159,7 @@ public class UserController extends HttpServlet {
 //				</script>
 				jsResponse("error.jsp", "수정실패", response);
 			}
-		}else if(command.equals("/deluser.board")){
+		}else if(command.equals("/deluser.user")){
 			String id=request.getParameter("id");
 			
 			boolean isS=dao.delUser(id);

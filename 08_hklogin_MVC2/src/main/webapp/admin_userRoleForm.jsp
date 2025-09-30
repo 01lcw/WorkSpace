@@ -18,13 +18,13 @@
 			님이 로그인 하였습니다.
 			</span>
 			<span>
-				<a href="userlistall.board">회원전체조회</a>
+				<a href="userlistall.admin">회원전체조회</a>
 			</span>|
 			<span>
-				<a href="userlist.board">회원정보[등급]수정</a>
+				<a href="userlist.admin">회원정보[등급]수정</a>
 			</span>|
 			<span>
-				<a href="logout.board">로그아웃</a>
+				<a href="logout.admin">로그아웃</a>
 			</span>
 		</div>
 	</div>
@@ -32,7 +32,7 @@
 		<h1>관리자페이지</h1>
 
 		<div class="userRole">
-			<form action="updaterole.board" method="post" >
+			<form action="updaterole.admin" method="post" >
 				<input type="hidden" name="id" value="${dto.id}"/>
 				<table border="1" class="table table-striped table-hover">
 					<tr>

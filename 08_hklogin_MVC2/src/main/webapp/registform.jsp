@@ -157,7 +157,7 @@
 
 			</div>
 			<div class="col-6">
-				<button class="form-control" type="button" onclick="location.href='index.board'">메인</button>
+				<button class="form-control" type="button" onclick="location.href='index.user'">메인</button>
 
 			</div>
 		</div>

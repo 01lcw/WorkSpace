@@ -57,25 +57,25 @@ public class AdminController extends HttpServlet {
 
 		AdminDao dao=AdminDao.getAdminDao();
 	
-		if(command.equals("/userlistall.board")){
+		if(command.equals("/userlistall.admin")){
 			List<UserDto>list=dao.getAllUserList();
 			request.setAttribute("list", list);
 			dispatch("admin_listAll.jsp", request, response);
-		}else if(command.equals("/userlist.board")){
+		}else if(command.equals("/userlist.admin")){
 			List<UserDto>list=dao.getUserList();
 			request.setAttribute("list", list);
 			dispatch("admin_listA.jsp", request, response);
-		}else if(command.equals("/userrole.board")){
+		}else if(command.equals("/userrole.admin")){
 			String id=request.getParameter("id");
 			UserDto dto=dao.getUserRole(id);
 			request.setAttribute("dto", dto);
 			dispatch("admin_userRoleForm.jsp", request, response);
-		}else if(command.equals("/updaterole.board")){
+		}else if(command.equals("/updaterole.admin")){
 			String id=request.getParameter("id");
 			String role=request.getParameter("role");
 			boolean isS=dao.getUpdateRole(id,role);
 			if(isS){
-				response.sendRedirect("userlist.board");
+				response.sendRedirect("userlist.admin");
 			}else{
 				response.sendRedirect("error.jsp");
 			}
