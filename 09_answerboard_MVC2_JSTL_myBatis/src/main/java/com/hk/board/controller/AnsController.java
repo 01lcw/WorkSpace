@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.hk.board.dao.AnsDao;
 import com.hk.board.dto.AnsDto;
@@ -35,6 +36,13 @@ public class AnsController extends HttpServlet{
 		if(command.equals("/boardlist.board")) {
 			//페이지번호 받기
 			String pnum=request.getParameter("pnum");
+			
+			HttpSession session=request.getSession();
+			if(pnum==null) {//페이지번호가 없이 요청들어왔을 경우
+				pnum=(String)session.getAttribute("pnum");
+			}else {//새로운 페이지 요청이 들어왔을 경우
+				session.setAttribute("pnum", pnum);
+			}
 			
 			List<AnsDto> list=dao.getAllList(pnum);
 			request.setAttribute("list", list);
