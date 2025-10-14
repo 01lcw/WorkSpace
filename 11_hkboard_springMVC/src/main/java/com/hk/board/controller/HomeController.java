@@ -7,13 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.hk.board.dtos.HkDto;
 import com.hk.board.service.IHkService;
-
+@Repository
 @Controller
 //@RequestMapping("/board")  --> /board/boardlist.do
 public class HomeController {
@@ -94,7 +95,7 @@ public class HomeController {
 		return "boardupdateform";
 	}
 	
-	//글수정하기
+	//글추가하기
 	@RequestMapping(value="/boardupdate.do",
 			        method= RequestMethod.POST)
 	public String boardUpdate(HkDto dto) {

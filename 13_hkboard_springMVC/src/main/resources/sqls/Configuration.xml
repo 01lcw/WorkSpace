@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+  
+<!-- 이클립스에서 DTD 다운로드를 허용해 줘야 한다.
+메뉴: windows - Preferences - XML(Wild Web Developer) - Download external resources 
+                                                                            목록 체크하기-->  
+<configuration>
+  
+<!-- 변수설정 -->
+  <typeAliases>
+  	<typeAlias type="com.hk.ansboard.dtos.AnsDto" alias="AnsDto" />
+  </typeAliases> 
+  
+  <!-- DB 접속 정보 설정 -->
+  <mappers>
+    <mapper resource="sqls/BoardMapper.xml"/>
+  </mappers>
+</configuration>
