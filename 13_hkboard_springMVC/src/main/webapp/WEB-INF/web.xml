@@ -6,7 +6,7 @@
   version="4.0"
   metadata-complete="true">
 
-  <display-name>13_hkboard_springMVC</display-name>
+  <display-name>13_answerboard_springMVC</display-name>
   <!-- context-param 설정: root-context.xml의 경로: DB관련 내용 설정 -->
 	<!-- contextConfigLocation라는 이름을 리스너가 찾는다 -->
 	<context-param>
@@ -52,5 +52,28 @@
 	    <url-pattern>/*</url-pattern> 
 	</filter-mapping>
   
-
+ <!--   500 오류 처리 -->
+  <error-page>
+  	<error-code>500</error-code>
+  	<location>/error.jsp</location>
+  </error-page>
+  <!--   404 오류 처리 -->
+  <error-page>
+  	<error-code>404</error-code>
+  	<location>/error.jsp</location>
+  </error-page>
+  <!-- 예외처리 클래스 확인 -->
+  <error-page>
+  	<exception-type>java.lang.NullPointerException</exception-type>
+  	<location>/error.jsp</location>
+  </error-page>
+  <error-page>
+  	<exception-type>java.lang.NumberFormatException</exception-type>
+  	<location>/error.jsp</location>
+  </error-page>
+  <!-- 그외에 예외 처리 -->
+   <error-page>
+  	<exception-type>java.lang.Throwable</exception-type>
+  	<location>/error.jsp</location>
+  </error-page>
 </web-app>

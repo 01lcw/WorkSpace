@@ -26,6 +26,7 @@ public class AnsController {
 			       ,method = RequestMethod.GET)
 	public String home() {
 		System.out.println("HOME 페이지로 이동");
+		System.out.println("Working Directory:"+System.getProperty("user.dir"));
 		return "home";
 	}
 	
@@ -57,32 +58,95 @@ public class AnsController {
 	}
 	
 	//상세보기
-	@RequestMapping(value = "/boarddetail.do",method = RequestMethod.GET)
-	public String getBoard(Model model, String seq, String review) {
+	@RequestMapping(value="/boarddetail.do",
+					method=RequestMethod.GET)
+	public String getBoard(Model model,
+			               String seq, 
+			               String review) {
+		
 		if(review!=null&&review.equals("y")) {
 			ansService.readCount(Integer.parseInt(seq));
 			return "redirect:boarddetail.do?seq="+seq;
 		}else {
 			AnsDto dto=ansService.getBoard(Integer.parseInt(seq));
-			model.addAttribute("dto",dto);
-			return "detailboard";
+			model.addAttribute("dto", dto);
+			return "boarddetail";
 		}
 	}
 	
-	// 글 추가 폼 이동
-		@RequestMapping(value = "/insertboardform.do",method = RequestMethod.GET)
-		public String insertBoardForm() {
-			return "insertboardform";
+	//글추가 폼이동
+	@RequestMapping(value="/insertboardform.do",
+			method=RequestMethod.GET)
+	public String insertBoardForm() {
+	
+		return "insertboardform";
+	}
+	
+	//글추가하기
+	@RequestMapping(value="/insertboard.do",
+			        method=RequestMethod.POST)
+	public String insertBoard(AnsDto dto) {
+		boolean isS=ansService.insertBoard(dto);
+		if(isS) {
+			return "redirect:boardlist.do";
+		}else {
+			return "redirect:error.jsp";
 		}
-		
-	// 글 추가 폼 이동
-		@RequestMapping(value = "/insertboard.do",method = RequestMethod.POST)
-		public String insertBoard(AnsDto dto) {
-			boolean isS=ansService.insertBoard(dto);
-			if(isS) {
-				return "redirect:boardlist.do";
-			}else {
-				return "error";
-			}
+	}
+	
+	//글 수정하기 폼 이동
+	@RequestMapping(value="/boardupdateform.do",
+			       method=RequestMethod.GET)
+	public String boardUpdateForm(int seq, Model model) {
+		AnsDto dto=ansService.getBoard(seq);
+		model.addAttribute("dto", dto);
+		return "boardupdateform";
+	}
+	//글 수정하기 
+	@RequestMapping(value="/boardupdate.do",
+	               method=RequestMethod.POST)
+	public String boardUpdate(AnsDto dto) {
+		boolean isS=ansService.boardUpdate(dto.getTitle(),
+										   dto.getContent(),
+										   dto.getSeq());
+		if(isS) {
+			return "redirect:boarddetail.do?seq="+dto.getSeq();
+		}else {
+			return "redirect:error.jsp";
 		}
+	}
+	//글 삭제하기
+	@RequestMapping(value="/deleteboard.do",
+					method=RequestMethod.GET)
+	public String deleteBoard(int seq) {
+		boolean isS=ansService.deleteBoard(seq);
+		if(isS) {
+			return "redirect:boardlist.do";
+		}else {
+			return "redirect:error.jsp";
+		}
+	}
+	//여러글 삭제하기
+	@RequestMapping(value="/mudel.do",
+			        method=RequestMethod.POST)
+	public String mulDel(String[] seq) {
+		boolean isS=ansService.mulDel(seq);
+		if(isS) {
+			return "redirect:boardlist.do";
+		}else {
+			return "redirect:error.jsp";
+		}
+	}
+	
+	//답글 추가하기
+	@RequestMapping(value="/replyboard.do",
+	                method=RequestMethod.POST)
+	public String replyBoard(AnsDto dto) {
+		boolean isS=ansService.replyBoard(dto);
+		if(isS) {
+			return "redirect:boardlist.do";
+		}else {
+			return "redirect:error.jsp";
+		}
+	}
 }

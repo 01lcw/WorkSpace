@@ -8,31 +8,32 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hk.ansboard.dtos.AnsDto;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Repository
-@RequiredArgsConstructor //생성자를 통해 주입하는 방법
+//@RequiredArgsConstructor //생성자를 통해 주입하는 방법
 public class AnsDaoImp implements IAnsDao{
 	
 	//생성자 주입
-	private final SqlSessionTemplate sqlSession;
+//	private @NonNull SqlSessionTemplate sqlSession;
 	
 //	public AnsDaoImp() {
 //		// TODO Auto-generated constructor stub
 //	}
-	
 	//lombok을 이용하면 코드 생략 가능
-	public AnsDaoImp(SqlSessionTemplate sqlSession) {
-		this.sqlSession=sqlSession;
-	}
+//	public AnsDaoImp(SqlSessionTemplate sqlSession) {
+//		this.sqlSession=sqlSession;
+//	}
 	
-//	@Autowired //타입으로 찾아서 주입하는 기능
+	@Autowired // 타입으로 찾아서 주입하는 기능
 //	@Qualifier("sqlSessionTemplate") //보조역할: Autowired와 같이 사용(이름으로 구별)
 //	@Resource(name = "sqlSessionTemplate") //이름으로 매칭, 이름 없을 경우 타입으로 매칭(별도 라이브러리추가해야함)
-//	private SqlSessionTemplate sqlSession;
+	private SqlSessionTemplate sqlSession;
 	
 	private String namespace="com.hk.ansboard.dao.";
 	
@@ -48,10 +49,18 @@ public class AnsDaoImp implements IAnsDao{
 		return sqlSession.selectOne(namespace+"getpcount");
 	}
 
+	/*
+	 * @Override public boolean insertBoard(AnsDto dto) { int
+	 * count=sqlSession.insert(namespace+"insertboard", dto); return
+	 * count>0?true:false; }
+	 */
+
 	@Override
 	public boolean insertBoard(AnsDto dto) {
-		int count=sqlSession.insert(namespace+"insertboard", dto);
-		return count>0?true:false;
+	    int refer = sqlSession.selectOne(namespace + "getMaxRefer"); // 새 refer 구하기
+	    dto.setRefer(refer);
+	    int count = sqlSession.insert(namespace + "insertboard", dto);
+	    return count > 0;
 	}
 
 	@Override
@@ -91,15 +100,17 @@ public class AnsDaoImp implements IAnsDao{
 		int count=sqlSession.update(namespace+"muldel", map);
 		return count>0?true:false;
 	}
-	
+
 	@Override
 	public int replyUpdate(AnsDto dto) {
 		return sqlSession.update(namespace+"replyupdate", dto);
 	}
-	
+
 	@Override
 	public int replyInsert(AnsDto dto) {
-		return sqlSession.update(namespace+"replyinsert", dto);
+		return sqlSession.insert(namespace+"replyinsert", dto);
 	}
+
+	
 
 }

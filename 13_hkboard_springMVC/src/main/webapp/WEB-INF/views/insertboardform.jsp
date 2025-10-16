@@ -10,8 +10,9 @@
 <title>게시판 글 추가하기</title>
 </head>
 <body>
+<div id="container"> 
 <h1>글 추가하기</h1>
-<form action="insertboard.board" method="post">
+<form action="insertboard.do" method="post">
 	<table class="table table-striped" border="1">
 		<tr>
 			<th>작성자(ID)</th>
@@ -32,11 +33,12 @@
 			<td colspan="2">
 				<input class="btn btn-primary" type="submit" value="글등록"/>
 				<input class="btn btn-primary" type="button" value="글목록" 
-			        onclick="location.href='boardlist.board'"/>
+			        onclick="location.href='boardlist.do'"/>
 			</td>
 		</tr>
 	</table>
 </form>
+</div>
 </body>
 </html>
 <jsp:include page="footer.jsp" />

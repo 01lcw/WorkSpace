@@ -6,6 +6,7 @@
 <!-- namespace속성: 반드시 정의를 하자 -->
 <mapper namespace="com.hk.ansboard.dao">
 
+	
   <select id="boardlist" parameterType="Map" resultType="AnsDto">
   	SELECT rn,seq, id, title, content, regdate, readcount
        ,refer,step, depth, delflag
@@ -45,12 +46,22 @@
 	FROM answerboard
   </select>
   
-  <insert id="insertboard" parameterType="AnsDto" >
+  <!-- <insert id="insertboard" parameterType="AnsDto" >
   	INSERT INTO ANSWERBOARD
 	VALUES( NULL,#{id},#{title},#{content},SYSDATE(),
            (SELECT NVL(MAX(REFER),0)+1 FROM ANSWERBOARD),
            0,0,0,'N')
-  </insert>
+  </insert> -->
+  <select id="getMaxRefer" resultType="int">
+    SELECT IFNULL(MAX(REFER), 0) + 1 FROM ANSWERBOARD
+</select>
+  
+  <insert id="insertboard" parameterType="AnsDto">
+    INSERT INTO ANSWERBOARD
+    VALUES (NULL, #{id}, #{title}, #{content}, SYSDATE(),
+            #{refer}, 0, 0, 0, 'N')
+</insert>
+  
   
 <!--   <select id="getboard" parameterType="Integer" resultType="AnsDto"> -->
 <!--   	SELECT SEQ,ID,TITLE,CONTENT,REGDATE -->

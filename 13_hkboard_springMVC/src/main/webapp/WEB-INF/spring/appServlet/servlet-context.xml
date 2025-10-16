@@ -10,16 +10,17 @@
     <!-- Spring MVC @Controller같은 어노테이션 방식으로 운영을 하자~ -->
 	<mvc:annotation-driven/>
 
-	<!-- 정적파일 경로(js, css, img)를 설정 -->
+	<!-- 정적파일 경로(js, css, img)를 설정  -->
+	<!-- location:실제 경로 의미, mapping:사용하는 경로 의미 -->
 	<mvc:resources location="/resources/" mapping="/**"></mvc:resources>
 
 	<!-- JSP 셋팅 :   prefix/페이지이름suffix 경로를 만들어서 찾아줌 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/views/" />
-		<property name="suffix" value=".jsp" />
+		<property name="suffix" value=".jsp" />    
 	</bean>
 	<!-- 객체를 xml에 등록하지 않아도 생성해서 사용할 수 있게 한다. -->
-	<!-- base-package는 기본적으로 3뎁스로 구성한다. -->
-	<context:component-scan base-package="com.hk.ansboard" />
-	
+	<!-- base-package는 기본적으로 3뎁스로 구성한다. controller bean 스캔 등록 -->
+	<context:component-scan base-package="com.hk.ansboard.controller" />
+
 </beans>
