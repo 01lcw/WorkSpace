@@ -10,10 +10,13 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class CalServiceImp {
+	
+	// 파라미터로 request객체를 전달받음 ---> 요청정보를 처리할 수 있는 환경
 	public Map<String, Integer> makeCalendar(HttpServletRequest request) {
 		String paramYear=request.getParameter("year");
 		String paramMonth=request.getParameter("month");
 		
+		//달력에 필요한 값을 구하기 위해 calendar객체가 필요함
 		Calendar cal=Calendar.getInstance();
 		
 		//paramYear등의 값이 null이 아니면 사용자가 원하는 달을 요청
@@ -22,6 +25,15 @@ public class CalServiceImp {
 		
 		int month=(paramMonth==null)?cal.get(Calendar.MONTH)+1:Integer.parseInt(paramMonth);
 		
+		//문제점: 월을 이동할 때 11, 12, 13, 14... 또는 2, 1, 0, -1
+		if(month>12) {
+			month=1;
+			year++;
+		}
+		if(month<1) {
+			month=12;
+			year--;
+		}
 		//1. 해당 월의 1일에 대한 요일을 구하기
 		//  - 1~7숫자를 반환: 1은 일요일 ~ 7은 토요일
 		cal.set(year, month-1, 1); //월:0~11월

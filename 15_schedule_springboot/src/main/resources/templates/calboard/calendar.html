@@ -12,14 +12,14 @@
 		<h1>일정관리[달력보기]</h1>
 		<div class="cal">
 			<div id="ctitle">
-				<a href="#">◁</a>
-				<a href="#">◀</a>
-				<span class="y"></span>
+				<a th:href="@{/schedule/calendar(year=${calMap.year-1},month=${calMap.month})}">◁</a>
+				<a th:href="@{/schedule/calendar(year=${calMap.year},month=${calMap.month-1})}">◀</a>
+				<span class="y" th:text="${calMap.year}"></span>
 				<span>년</span>
-				<span class="m"></span>
+				<span class="m" th:text="${calMap.month}"></span>
 				<span>월</span>
-				<a href="#">▶</a>
-				<a href="#">▷</a>
+				<a th:href="@{/schedule/calendar(year=${calMap.year},month=${calMap.month+1})}">▶</a>
+				<a th:href="@{/schedule/calendar(year=${calMap.year+1},month=${calMap.month})}">▷</a>
 				
 			</div>
 			<div id="thead">
@@ -27,7 +27,19 @@
 				<div>수</div><div>목</div><div>금</div><div>토</div>
 			</div>
 			<div id="tbody">
-				<!-- 해당 달의 1일의 요일 -->
+				<!-- 해당 달의 1일의 요일 : 만약 월요일이라면 2라는 값 반환 -->
+				<th:block th:if="${calMap.dayOfWeek>1}">
+					<div th:each="num : ${#numbers.sequence(1,calMap.dayOfWeek-1)}">&nbsp;</div>
+				</th:block>
+				<th:block th:each="i : ${#numbers.sequence(1,calMap.lastDay)}">
+					<div>
+						<a th:href="@{/schedule/calboardlist(year=${calMap.year},month=${calMap.month},date=${i})}"
+						   th:text="${i}"></a>
+						   <a th:href="@{/schedule/addcalboardform(year=${calMap.year},month=${calMap.month},date=${i})}">
+						   		<img class="pen" th:src="@{/img/pen.png}"   alt="일정추가"/>
+						   </a>
+					</div>
+				</th:block>
 			</div>
 		</div>
 	</div>
