@@ -2,15 +2,32 @@ package com.hk.board.service;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hk.board.command.InsertCalCommand;
+import com.hk.board.dtos.CalDto;
+import com.hk.board.mapper.CalMapper;
+import com.hk.board.utils.Util;
+
 import jakarta.servlet.http.HttpServletRequest;
+
 
 @Service
 public class CalServiceImp {
 	
+	@Autowired
+	private CalMapper calMapper;
+	
+	@Autowired
+	private Util util;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 	// 파라미터로 request객체를 전달받음 ---> 요청정보를 처리할 수 있는 환경
 	public Map<String, Integer> makeCalendar(HttpServletRequest request) {
 		String paramYear=request.getParameter("year");
@@ -51,4 +68,69 @@ public class CalServiceImp {
 		
 		return map;
 	}
+	// 일정 추가하기
+	public boolean insertCalBoard(InsertCalCommand insertCalCommand) {
+		//command에는 id, title, content, y,m,d,h,m <- DB와 일치X
+		//ymdhm --> mdate로 변환 작업
+		//command --> dto로 데이터 옮기기
+		
+		//"202510230939" --> mdate로 저장
+		String mdate = insertCalCommand.getYear()
+							+util.isTwo(insertCalCommand.getMonth()+"")
+							+util.isTwo(insertCalCommand.getDate()+"")
+							+util.isTwo(insertCalCommand.getHour()+"")
+							+util.isTwo(insertCalCommand.getMin()+"");
+		
+		//command -> dto로 값을 복사해서 넣는 작업
+//		CalDto dto=new CalDto();
+//		dto.setId(insertCalCommand.getId());
+//		dto.setTitle(insertCalCommand.getTitle());
+//		dto.setContent(insertCalCommand.getContent());
+//		dto.setMdate(mdate);
+								 //(복사할 대상 객체, 붙여넣을 객체의 타입)
+		CalDto dto=modelMapper.map(insertCalCommand, CalDto.class);
+		dto.setMdate(mdate); //맴버필드 불일치일 경우는 따로 저장
+		int count=calMapper.insertCalBoard(dto);
+		
+		
+		return count>0?true:false;
+	}
+	
+	//일정목록보기
+	public List<CalDto> calBoardList(String id,Map<String, String>paramMap){
+		//조회할 일정의 날짜 8자리 만들어주기-> "9" -> 09 -> "20250910"
+		String yyyyMMdd =paramMap.get("year")
+						+util.isTwo(paramMap.get("month"))
+						+util.isTwo(paramMap.get("date"));
+		
+		//쿼리에 파라미터로 전달할 map 객체 생성
+		Map<String, String>map=new HashMap<>();
+		map.put("id", id);
+		map.put("yyyyMMdd", yyyyMMdd);
+		return calMapper.calBoardList(map);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

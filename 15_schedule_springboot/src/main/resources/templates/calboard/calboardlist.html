@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div layout:fragment="content">
+	<div id="container">
+		<form th:action="@{/schedule/calmuldel}" method="post">
+			<table class="table caption-top">
+				<caption>
+					<span th:text="${param.year}"></span>.
+					<span th:text="${param.month}"></span>.
+					<span th:text="${param.date}"></span>.
+				</caption>
+				<tr>
+					<th><input class="form-check-input" type="checkbox" name="all"/></th>
+					<th>일정</th>
+					<th>제목</th>
+					<th>작성일</th>
+				</tr>
+				<th:block th:if="${#lists.isEmpty(list)}">
+					<tr>
+						<td colspan="4">일정이 없습니다.</td>
+					</tr>
+				</th:block>
+				<th:block th:unless="${#lists.isEmpty(list)}">
+					<tr th:each="dto:${list}">
+						<td><input class="form-check-input" type="checkbox" name="seq" th:value="${dto.seq}"/></td>
+						<td th:text="${dto.mdate}"></td>
+						<td>
+							<a th:href="@{/schedule/calboarddetail(seq=${dto.seq})}"  
+							   th:text="${dto.title}"></a>
+						</td>
+						<td th:text="${#dates.format(dto.regdate,'yyyy-MM-dd')}"></td>
+					</tr>
+				</th:block>
+				<tr>
+					<td colspan="4">
+						<button type="submit" title="일정삭제" class="btn btn-primary">
+							일정삭제
+						</button>
+						<button type="button" title="달력보기" class="btn btn-primary"
+						        th:onclick="|location.href='@{/schedule/calendar(year=${param.year},month=${param.month})}'|">
+							달력보기
+						</button>
+						<span>유효값 처리시 오류 메시지 출력 부분</span>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+</body>
+</html>

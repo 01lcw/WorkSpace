@@ -12,6 +12,15 @@
 		INSERT INTO CALBOARD
 		VALUES(NULL,#{id},#{title},#{content},#{mdate},SYSDATE())
 	</insert>
+	
+	<select id="calBoardList" parameterType="Map" resultType="CalDto">
+		SELECT SEQ, ID, TITLE, CONTENT, MDATE, REGDATE
+		FROM CALBOARD
+		WHERE ID= #{id}
+		AND SUBSTRING(MDATE,1,8)= '20251023';
+	</select>
+	
+	
 
 
 </mapper>
