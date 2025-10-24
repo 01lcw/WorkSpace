@@ -17,10 +17,26 @@
 		SELECT SEQ, ID, TITLE, CONTENT, MDATE, REGDATE
 		FROM CALBOARD
 		WHERE ID= #{id}
-		AND SUBSTRING(MDATE,1,8)= '20251023';
+		AND SUBSTRING(MDATE,1,8)= #{yyyyMMdd}
 	</select>
 	
+	<delete id="calMulDel" parameterType="Map">
+		DELETE FROM CALBOARD WHERE SEQ IN 
+		<foreach collection ="seqs" item="seq" open="(" close=")" separator=",">#{seq}</foreach>
+	</delete>
 	
+	<select id ="calBoardDetail" parameterType="Integer" resultType="CalDto">
+		SELECT SEQ, ID, TITLE, CONTENT, MDATE, REGDATE
+		FROM CALBOARD
+		WHERE SEQ = #{seq}
+	 </select>
+	 
+	 <update id="calBoardUpdate" parameterType="CalDto">
+	 	UPDATE CALBOARD
+	 	SET TITLE=#{title}, CONTENT=#{content}
+	 	,MDATE=#{mdate},REGDATE=SYSDATE()
+	 	WHERE SEQ=#{seq}
+	 </update>
 
 
 </mapper>

@@ -5,19 +5,38 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript">
+
+	function isConfirm(){
+		if(confirm("정말 삭제 하시겠습니까?")){
+			return true;
+		}
+		return false;
+	}
+	
+	//전체선택 체크박스 기능 구현
+	function allSel(bool){
+		var chks=document.getElementsByName("seq");//[chk,chk,chk..]
+		for (var i = 0; i < chks.length; i++) {
+			chks[i].checked=bool;//true:체크, false:체크해제
+		}
+	}
+</script>
 </head>
 <body>
 <div layout:fragment="content">
 	<div id="container">
-		<form th:action="@{/schedule/calmuldel}" method="post">
+		<form th:action="@{/schedule/calmuldel}" method="post"
+		      th:object="${deleteCalCommand}" onsubmit="return isConfirm()">
 			<table class="table caption-top">
 				<caption>
-					<span th:text="${param.year}"></span>.
-					<span th:text="${param.month}"></span>.
-					<span th:text="${param.date}"></span>.
+					<span th:text="${session.ymd.year}"></span>.
+					<span th:text="${session.ymd.month}"></span>.
+					<span th:text="${session.ymd.date}"></span>.
 				</caption>
 				<tr>
-					<th><input class="form-check-input" type="checkbox" name="all"/></th>
+					<th><input class="form-check-input" type="checkbox" name="all"
+					    onclick="allSel(this.checked)"/></th>
 					<th>일정</th>
 					<th>제목</th>
 					<th>작성일</th>
@@ -30,7 +49,7 @@
 				<th:block th:unless="${#lists.isEmpty(list)}">
 					<tr th:each="dto:${list}">
 						<td><input class="form-check-input" type="checkbox" name="seq" th:value="${dto.seq}"/></td>
-						<td th:text="${dto.mdate}"></td>
+						<td th:text="${@util.toDates(dto.mdate)}"></td>
 						<td>
 							<a th:href="@{/schedule/calboarddetail(seq=${dto.seq})}"  
 							   th:text="${dto.title}"></a>
@@ -42,12 +61,16 @@
 					<td colspan="4">
 						<button type="submit" title="일정삭제" class="btn btn-primary">
 							일정삭제
+							<i class="bi bi-trash3"></i>
 						</button>
 						<button type="button" title="달력보기" class="btn btn-primary"
-						        th:onclick="|location.href='@{/schedule/calendar(year=${param.year},month=${param.month})}'|">
+						        th:onclick="|location.href='@{/schedule/calendar(year=${session.ymd.year},month=${session.ymd.month})}'|">
 							달력보기
+							<i class="bi bi-calendar-week"></i>
 						</button>
-						<span>유효값 처리시 오류 메시지 출력 부분</span>
+						<span class="errorField"
+						      th:if="${#fields.hasErrors('seq')}"
+						      th:errors="*{seq}"></span>
 					</td>
 				</tr>
 			</table>

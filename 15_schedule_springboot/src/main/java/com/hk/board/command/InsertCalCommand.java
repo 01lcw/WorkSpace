@@ -5,23 +5,22 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-//client:파라미터 ------> command객체가 받음
-//controller --> service --> DTO --> DB
-
-
+// client:파라미터 -----> command객체가 받음
+// controller --> service --> DTO --> DB
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
+@ToString
 public class InsertCalCommand {
 	
 	private int seq;
-	@NotBlank(message = "아이디를 입력하세요")
+	@NotBlank(message = "아이디를 입력하세요") 
 	private String id;
 	@NotBlank(message = "제목을 입력하세요")
 	private String title;
-	@NotBlank(message = "일정 내용을 입력하세요")
+	@NotBlank(message = "일정내용을 입력하세요")
 	private String content;
 	
 	//mdate 컬럼에 저장할 값: 12자리로 변환해서 나중에 DTO에 전달
@@ -35,4 +34,5 @@ public class InsertCalCommand {
 	private int hour;
 	@NotNull(message = "분을 입력하세요")
 	private int min;
+	
 }
