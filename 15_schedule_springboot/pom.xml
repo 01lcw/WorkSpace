@@ -12,7 +12,7 @@
 	<artifactId>15_schedule_springboot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>15_schedule_springboot</name>
-	<description>sbb project for Spring Boot</description>
+	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -34,16 +34,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
-		<!--thymeleaf 기본 라이브러리-->
+		<!-- thymeleaf 기본 라이브러리-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-		<!--thymeleaf layout 라이브러리 -->
-	<dependency>
-    	<groupId>nz.net.ultraq.thymeleaf</groupId>
-    	<artifactId>thymeleaf-layout-dialect</artifactId>
-	</dependency>
+		<!-- thymeleaf layout 라이브러리-->
+		<dependency>
+		    <groupId>nz.net.ultraq.thymeleaf</groupId>
+		    <artifactId>thymeleaf-layout-dialect</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
@@ -90,12 +90,13 @@
 			<version>3.0.5</version>
 			<scope>test</scope>
 		</dependency>
-		<!--command와 dto를 맵핑해주는 기능-->
-		<dependency>
-			<groupId>org.modelmapper</groupId>
-			<artifactId>modelmapper</artifactId>
-			<version>3.1.1</version>
+		<!-- command와 dto를 맵핑해주는 기능-->
+		<dependency> 
+			<groupId>org.modelmapper</groupId> 
+			<artifactId>modelmapper</artifactId> 
+			<version>3.1.1</version> 
 		</dependency>
+		
 	</dependencies>
 
 	<build>
