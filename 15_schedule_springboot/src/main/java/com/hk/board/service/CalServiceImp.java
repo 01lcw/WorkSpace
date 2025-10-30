@@ -8,6 +8,7 @@ import java.util.Map;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hk.board.command.InsertCalCommand;
 import com.hk.board.command.UpdateCalCommand;
@@ -18,6 +19,7 @@ import com.hk.board.utils.Util;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Service
+@Transactional
 public class CalServiceImp {
 
 	@Autowired
@@ -80,6 +82,7 @@ public class CalServiceImp {
 		
 		return map;
 	}
+	
 	
 	//일정 추가하기
 	public boolean insertCalBoard(InsertCalCommand insertCalCommand) {
