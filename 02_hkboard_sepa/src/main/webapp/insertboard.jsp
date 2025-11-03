@@ -1,4 +1,4 @@
-<%@page import="com.hk.board.dtos.HkDto"%>
+<%@page import="com.family.calendar.dtos.HkDto"%>
 <%@page import="com.hk.board.daos.HkDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
