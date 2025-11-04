@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>방문 상세보기</title>
+    <style>
+        body {
+            font-family: '맑은 고딕', sans-serif;
+            margin: 20px;
+        }
+        h2 {
+            color: #3a6ea5;
+        }
+        table {
+            border-collapse: collapse;
+            width: 70%;
+            margin-bottom: 30px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .commu-section {
+            border-top: 2px solid #3a6ea5;
+            padding-top: 15px;
+        }
+        textarea {
+            width: 400px;
+            height: 80px;
+        }
+        button {
+            background-color: #3a6ea5;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2f5585;
+        }
+        .log-box {
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 10px;
+            width: 500px;
+            margin-bottom: 10px;
+        }
+        .log-writer {
+            font-weight: bold;
+            color: #3a6ea5;
+        }
+        .log-time {
+            font-size: 0.85em;
+            color: #777;
+        }
+        .log-content {
+            margin-top: 5px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>방문 상세 정보</h2>
+
+<table>
+    <tr>
+        <th>방문 ID</th>
+        <td th:text="${dto.visit_id}"></td>
+    </tr>
+    <tr>
+        <th>가족 구성원</th>
+        <td th:text="${dto.member_id}"></td>
+    </tr>
+    <tr>
+        <th>병원명</th>
+        <td th:text="${dto.hospital_name}"></td>
+    </tr>
+    <tr>
+        <th>진료과</th>
+        <td th:text="${dto.department}"></td>
+    </tr>
+    <tr>
+        <th>방문 날짜</th>
+        <td th:text="${dto.visit_date}"></td>
+    </tr>
+    <tr>
+        <th>비용</th>
+        <td th:text="${dto.cost}"></td>
+    </tr>
+    <tr>
+        <th>진단 내용</th>
+        <td th:text="${dto.diagnosis} ?: '등록되지 않음'"></td>
+    </tr>
+</table>
+
+
+<div class="commu-section">
+    <h2>가족 커뮤니케이션 기록</h2>
+
+    <!-- 로그 작성 폼 -->
+    <form th:action="@{/commu/insert}" method="post">
+        <input type="hidden" name="visit_id" th:value="${dto.visit_id}">
+        <p>작성자: <input type="text" name="writer" required></p>
+        <p>내용:</p>
+        <textarea name="content" placeholder="가족에게 공유할 진료 요약, 복약 안내 등을 작성하세요." required></textarea><br>
+        <button type="submit">등록</button>
+    </form>
+
+    <hr>
+
+    <!-- 로그 목록 -->
+    <div th:if="${#lists.isEmpty(logList)}">
+        <p>등록된 커뮤니케이션 기록이 없습니다.</p>
+    </div>
+
+    <div th:each="log : ${logList}" class="log-box">
+        <div class="log-writer" th:text="${log.writer}"></div>
+        <div class="log-time" th:text="${#temporals.format(log.created_at, 'yyyy-MM-dd HH:mm')}"></div>
+        <div class="log-content" th:text="${log.content}"></div>
+    </div>
+</div>
+<div class="btn-group">
+  <a th:href="@{/visit/list}" class="btn btn-secondary">목록으로</a>
+  <a th:href="@{/calendar}" class="btn btn-outline-primary">달력으로</a>
+</div>
+
+</body>
+</html>

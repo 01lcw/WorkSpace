@@ -1,46 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.family.calendar.mapper.VisitMapper">
 
-    <!-- 병원 방문 추가 -->
-    <insert id="insertVisit" parameterType="com.family.calendar.dtos.VisitDto">
-        INSERT INTO visit (member_id, hospital_name, department, visit_date, memo, cost)
-        VALUES (#{member_id}, #{hospital_name}, #{department}, #{visit_date}, #{memo}, #{cost});
-    </insert>
-
-    <!-- 병원 방문 목록 조회 -->
-    <select id="getVisitList" parameterType="int" resultType="com.family.calendar.dtos.VisitDto">
-        SELECT v.visit_id, v.member_id, f.name AS member_name,
-               v.hospital_name, v.department, v.visit_date, v.memo, v.cost
-        FROM visit v
-        JOIN family_member f ON v.member_id = f.member_id
-        WHERE f.user_id = #{user_id}
-        ORDER BY v.visit_date DESC;
+    <!-- 방문 목록 -->
+    <select id="getVisitList" resultType="com.family.calendar.dtos.VisitDto">
+        SELECT visit_id, member_id, hospital_name, department, visit_date, cost, diagnosis
+        FROM visit
+        ORDER BY visit_date DESC;
     </select>
 
-    <!-- 병원 방문 상세 -->
-    <select id="getVisitDetail" parameterType="int" resultType="com.family.calendar.dtos.VisitDto">
-        SELECT visit_id, member_id, hospital_name, department, visit_date, memo, cost
+    <!-- 방문 상세 -->
+    <select id="getVisitDetail" parameterType="long" resultType="com.family.calendar.dtos.VisitDto">
+        SELECT visit_id, member_id, hospital_name, department, visit_date, cost, diagnosis
         FROM visit
         WHERE visit_id = #{visit_id};
     </select>
 
-    <!-- 병원 방문 수정 -->
+    <!-- 방문 등록 -->
+    <insert id="insertVisit" parameterType="com.family.calendar.dtos.VisitDto">
+        INSERT INTO visit (member_id, hospital_name, department, visit_date, cost, diagnosis)
+        VALUES (#{member_id}, #{hospital_name}, #{department}, #{visit_date}, #{cost}, #{diagnosis});
+    </insert>
+
+    <!-- 방문 수정 -->
     <update id="updateVisit" parameterType="com.family.calendar.dtos.VisitDto">
         UPDATE visit
         SET hospital_name = #{hospital_name},
             department = #{department},
             visit_date = #{visit_date},
-            memo = #{memo},
-            cost = #{cost}
+            cost = #{cost},
+            diagnosis = #{diagnosis}
         WHERE visit_id = #{visit_id};
     </update>
 
-    <!-- 병원 방문 삭제 -->
-    <delete id="deleteVisit" parameterType="int">
+    <!-- 방문 삭제 -->
+    <delete id="deleteVisit" parameterType="long">
         DELETE FROM visit WHERE visit_id = #{visit_id};
     </delete>
-
+    
+    <!-- 날짜별 조회 -->
+    <select id="getVisitListByDate" resultType="com.family.calendar.dtos.VisitDto">
+    SELECT *
+    FROM visit
+    WHERE DATE(visit_date) = #{date}
+    ORDER BY visit_date ASC
+</select>
+    
 </mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.family.calendar.mapper.CommuMapper">
+
+    <!-- 특정 visit의 커뮤니케이션 로그 목록 -->
+    <select id="getLogsByVisit"
+            parameterType="long"
+            resultType="com.family.calendar.dtos.CommuDto">
+        SELECT log_id, visit_id, writer, content, created_at, updated_at
+        FROM commu_log
+        WHERE visit_id = #{visit_id}
+        ORDER BY created_at DESC;
+    </select>
+
+    <!-- 새 로그 등록 -->
+    <insert id="insertLog" parameterType="com.family.calendar.dtos.CommuDto">
+        INSERT INTO commu_log (visit_id, writer, content)
+        VALUES (#{visit_id}, #{writer}, #{content});
+    </insert>
+
+</mapper>

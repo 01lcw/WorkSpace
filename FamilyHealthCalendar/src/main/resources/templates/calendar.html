@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>가족 건강 달력</title>
+
+<script type="text/javascript">
+$(function() {
+    $(".d").hover(function() {
+        let aDate = $(this);
+        let year = $(".y").text().trim();
+        let month = $(".m").text().trim();
+        let date = aDate.text().trim();
+        let yyyyMMdd = year
+            + (month.length < 2 ? "0" + month : month)
+            + (date.length < 2 ? "0" + date : date);
+
+        $.ajax({
+            url: "/schedule/calcountajax",
+            method: "get",
+            async: false,
+            data: { "yyyyMMdd": yyyyMMdd },
+            dataType: "json",
+            success: function(data) {
+                aDate.after("<div class='cp'>" + data.count + "</div>");
+            },
+            error: function() {
+                console.log("통신 실패");
+            }
+        });
+    }, function() {
+        $(".cp").remove();
+    });
+});
+</script>
+
+<style type="text/css">
+/* ---------------- 기본 레이아웃 ---------------- */
+.cal {
+	width: 95%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.cal #thead, .cal #tbody {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 4px;
+}
+
+.cal #thead div {
+	font-weight: bold;
+	padding: 5px 0;
+	background-color: #f8f8f8;
+	border-radius: 8px;
+}
+
+/* ---------------- 날짜 칸 ---------------- */
+.day-box {
+	position: relative;
+	padding: 20px;
+	min-height: 90px;
+	border: 1px solid #eee;
+	border-radius: 10px;
+	background-color: #fff;
+	box-shadow: 0 0 3px rgba(0,0,0,0.05);
+	transition: background-color 0.2s;
+}
+.day-box:hover {
+	background-color: #fafafa;
+}
+
+.d {
+	display: inline-block;
+	font-weight: bold;
+	margin-bottom: 5px;
+	color: #333;
+	text-decoration: none;
+}
+
+/* ---------------- 일정 표시 ---------------- */
+.visit-item {
+	font-size: 0.85rem;
+	background-color: #eaf3ff;
+	color: #2f5dae;
+	padding: 3px 6px;
+	margin-top: 3px;
+	border-radius: 4px;
+	display: inline-block;
+}
+
+/* ---------------- 일정 없는 날 ---------------- */
+.day-empty {
+	color: #aaa;
+	font-size: 0.8rem;
+	text-align: center;
+	margin-top: 6px;
+	font-style: italic;
+}
+
+.add-btn {
+	display: inline-block;
+	font-size: 0.8rem;
+	color: #4b89dc;
+	background-color: #eef5ff;
+	border-radius: 5px;
+	padding: 2px 5px;
+	text-decoration: none;
+	margin-top: 5px;
+}
+.add-btn:hover {
+	background-color: #dceeff;
+}
+
+/* ---------------- 상태 점 표시 ---------------- */
+.dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	margin: 5px auto;
+}
+.dot-blue { background-color: #4b89dc; }
+.dot-gray { background-color: #ccc; }
+
+/* ---------------- hover시 일정 개수 표시 ---------------- */
+.cp {
+	position: absolute;
+	left: 25px;
+	top: -25px;
+	width: 35px;
+	height: 35px;
+	border-radius: 18px 18px 18px 2px;
+	background-color: pink;
+	line-height: 35px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 0.8rem;
+}
+</style>
+</head>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<body>
+<div layout:fragment="content">
+	<div id="container">
+		<h1>가족 건강 방문 일정</h1>
+
+		<div class="cal">
+			<!-- ---------------- 연/월 제목 ---------------- -->
+			<div id="ctitle" style="margin-bottom:10px;">
+				<a th:href="@{/calendar(year=${calMap.year-1},month=${calMap.month})}">◁</a>
+				<a th:href="@{/calendar(year=${calMap.year},month=${calMap.month-1})}">◀</a>
+
+				<span class="y" th:text="${calMap.year}"></span><span>년</span>
+				<span class="m" th:text="${calMap.month}"></span><span>월</span>
+
+				<a th:href="@{/calendar(year=${calMap.year},month=${calMap.month+1})}">▶</a>
+				<a th:href="@{/calendar(year=${calMap.year+1},month=${calMap.month})}">▷</a>
+			</div>
+
+			<!-- ---------------- 요일 헤더 ---------------- -->
+			<div id="thead">
+				<div>일</div><div>월</div><div>화</div>
+				<div>수</div><div>목</div><div>금</div><div>토</div>
+			</div>
+
+			<!-- ---------------- 날짜 출력 ---------------- -->
+			<div id="tbody">
+				<!-- 첫째 주 공백 -->
+				<th:block th:if="${calMap.dayOfWeek>1}">
+					<div th:each="num:${#numbers.sequence(1,calMap.dayOfWeek-1)}">&nbsp;</div>
+				</th:block>
+
+				<!-- 날짜 반복 -->
+				<th:block th:each="i:${#numbers.sequence(1,calMap.lastDay)}">
+					<div class="day-box">
+						<!-- 날짜 숫자 -->
+						<a th:text="${i}"
+						   th:href="@{/visit/list(year=${calMap.year}, month=${calMap.month}, day=${i})}"
+						   class="d"></a>
+
+						<!-- 방문 추가 아이콘 -->
+						<a th:href="@{/visit/insertForm}">
+							<img class="pen" th:src="@{/img/pen.png}" alt="방문 추가" style="width:14px; vertical-align:middle;"/>
+						</a>
+
+						<!-- 일정 목록 -->
+						<div th:utext="${@util.getCalViewList(i, clist, calMap.year, calMap.month)}"></div>
+
+						<!-- 일정 없음 처리 -->
+						<th:block th:if="${@util.getCalViewList(i, clist, calMap.year, calMap.month)} == ''">
+							<div class="dot dot-gray"></div>
+							<div class="day-empty">일정 없음</div>
+							<a th:href="@{/visit/insertForm}" class="add-btn">＋ 추가</a>
+						</th:block>
+
+						<!-- 일정 있음 처리 -->
+						<th:block th:if="${@util.getCalViewList(i, clist, calMap.year, calMap.month)} != ''">
+							<div class="dot dot-blue"></div>
+						</th:block>
+					</div>
+				</th:block>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
