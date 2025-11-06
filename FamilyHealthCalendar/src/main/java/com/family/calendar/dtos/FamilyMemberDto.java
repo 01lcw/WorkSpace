@@ -10,17 +10,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class VisitDto {
-    private Long visit_id;
+public class FamilyMemberDto {
     private Long member_id;
-    private String hospital_name;
-    private String department;
-    private LocalDate visit_date;
-    private Integer cost;
-    private String diagnosis;
     private Long user_id;
-    private String member_name;
-    private String member_relation;
-
-
+    private String name;
+    private String relation;
+    private LocalDate birth_date;
+    private String gender;
 }

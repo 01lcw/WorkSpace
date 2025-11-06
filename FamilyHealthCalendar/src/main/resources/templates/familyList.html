@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>가족 구성원 목록</title>
+<style>
+body { font-family: '맑은 고딕', sans-serif; background-color: #f8f9fa; }
+.container {
+  width: 80%; margin: 30px auto; background: #fff; border-radius: 8px;
+  padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
+th { background-color: #e9ecef; }
+.btn-box { display: flex; justify-content: space-between; margin-bottom: 15px; }
+.add-btn, .back-btn {
+  display: inline-block; padding: 6px 12px;
+  background-color: #4b89dc; color: white; text-decoration: none;
+  border-radius: 6px; font-size: 14px;
+}
+.add-btn:hover, .back-btn:hover { background-color: #3a6ea5; }
+
+/* ✅ 버튼 스타일 */
+.btn-edit {
+  background-color: #4caf50; color: white; border: none; border-radius: 4px;
+  padding: 5px 10px; cursor: pointer;
+}
+.btn-edit:hover { background-color: #3d8c40; }
+.btn-delete {
+  background-color: #e74c3c; color: white; border: none; border-radius: 4px;
+  padding: 5px 10px; cursor: pointer;
+}
+.btn-delete:hover { background-color: #c0392b; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>가족 구성원 목록</h2>
+
+  <!-- ✅ 버튼 영역 -->
+  <div class="btn-box">
+    <a class="add-btn" th:href="@{/family/insertForm}">구성원 추가</a>
+    <a class="back-btn" th:href="@{/calendar}">달력으로 돌아가기</a>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>이름</th>
+        <th>관계</th>
+        <th>생년월일</th>
+        <th>성별</th>
+        <th>관리</th> <!-- ✅ 수정·삭제 열 추가 -->
+      </tr>
+    </thead>
+
+    <tbody>
+      <!-- ✅ 각 가족 구성원 한 줄 -->
+      <tr th:each="m : ${members}">
+        <td th:text="${m.name}"></td>
+		<td th:text="${m.relation}"></td>
+		<td th:text="${m.birth_date}"></td>
+		<td th:text="${m.gender}"></td>
+
+
+        <!-- ✅ 수정·삭제 버튼 들어가는 칸 -->
+        <td>
+          <button class="btn-edit"
+                  th:onclick="|location.href='/family/updateForm?member_id=${m.member_id}'|">
+              수정
+          </button>
+          <button class="btn-delete"
+                  th:onclick="|if(confirm('정말 삭제하시겠습니까?')) location.href='/family/delete?member_id=${m.member_id}'|">
+              삭제
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

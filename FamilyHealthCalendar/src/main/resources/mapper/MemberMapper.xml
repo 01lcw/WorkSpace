@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.family.calendar.mapper.MemberMapper">
+
+    <!-- 회원가입 -->
+    <insert id="insertUser" parameterType="com.family.calendar.dtos.UserDto">
+        INSERT INTO users (username, password, name, role)
+        VALUES (#{username}, #{password}, #{name}, 'USER')
+    </insert>
+
+    <!-- 로그인 -->
+    <select id="findUserByUsernameAndPassword" resultType="com.family.calendar.dtos.UserDto">
+        SELECT * FROM users
+        WHERE username = #{username}
+        AND password = #{password}
+    </select>
+
+</mapper>

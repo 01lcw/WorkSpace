@@ -1,135 +1,223 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>방문 상세보기</title>
-    <style>
-        body {
-            font-family: '맑은 고딕', sans-serif;
-            margin: 20px;
-        }
-        h2 {
-            color: #3a6ea5;
-        }
-        table {
-            border-collapse: collapse;
-            width: 70%;
-            margin-bottom: 30px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .commu-section {
-            border-top: 2px solid #3a6ea5;
-            padding-top: 15px;
-        }
-        textarea {
-            width: 400px;
-            height: 80px;
-        }
-        button {
-            background-color: #3a6ea5;
-            color: white;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #2f5585;
-        }
-        .log-box {
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            padding: 10px;
-            width: 500px;
-            margin-bottom: 10px;
-        }
-        .log-writer {
-            font-weight: bold;
-            color: #3a6ea5;
-        }
-        .log-time {
-            font-size: 0.85em;
-            color: #777;
-        }
-        .log-content {
-            margin-top: 5px;
-            white-space: pre-wrap;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>방문 상세보기</title>
+<style>
+    body {
+        font-family: '맑은 고딕', sans-serif;
+        background-color: #f9fafc;
+        margin: 0;
+        padding: 40px 0;
+    }
+
+    .container {
+        width: 850px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 25px 40px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+        color: #2f5dae;
+        border-bottom: 2px solid #d8e4f8;
+        padding-bottom: 10px;
+        margin-bottom: 25px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+    th, td {
+        border-bottom: 1px solid #eee;
+        padding: 10px 15px;
+        text-align: left;
+    }
+
+    th {
+        width: 25%;
+        background-color: #f3f6fb;
+        color: #333;
+        font-weight: 600;
+    }
+
+    td {
+        background-color: #fff;
+    }
+
+    .commu-section {
+        margin-top: 40px;
+    }
+
+    .commu-section h2 {
+        color: #2f5dae;
+        border: none;
+        font-size: 1.3rem;
+    }
+
+    .log-form {
+        background: #f7f9fc;
+        border: 1px solid #dbe5f5;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 25px;
+    }
+
+    .log-form textarea {
+        width: 100%;
+        height: 80px;
+        resize: none;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        padding: 8px;
+        font-family: inherit;
+    }
+
+    .log-form input[type="text"] {
+        width: 180px;
+        padding: 6px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .log-form button {
+        background-color: #4b89dc;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 16px;
+        margin-top: 8px;
+        cursor: pointer;
+    }
+
+    .log-form button:hover {
+        background-color: #3b74c4;
+    }
+
+    .log-box {
+        border: 1px solid #dbe5f5;
+        border-radius: 8px;
+        padding: 12px 15px;
+        margin-bottom: 10px;
+        background: #fdfdfd;
+    }
+
+    .log-writer {
+        font-weight: bold;
+        color: #2f5dae;
+        font-size: 1rem;
+    }
+
+    .log-time {
+        font-size: 0.85rem;
+        color: #777;
+    }
+
+    .log-content {
+        margin-top: 6px;
+        white-space: pre-wrap;
+        font-size: 0.95rem;
+    }
+
+    .btn-group {
+        text-align: right;
+        margin-top: 30px;
+    }
+
+    .btn-group a {
+        display: inline-block;
+        padding: 8px 14px;
+        text-decoration: none;
+        border-radius: 6px;
+        margin-left: 6px;
+        font-size: 0.95rem;
+    }
+
+    .btn-secondary {
+        background-color: #4b89dc;
+        color: #fff;
+    }
+
+    .btn-secondary:hover {
+        background-color: #3a73bd;
+    }
+
+    .btn-outline-primary {
+        border: 1px solid #4b89dc;
+        color: #4b89dc;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #4b89dc;
+        color: #fff;
+    }
+</style>
 </head>
 
 <body>
+<div class="container">
+    <h2>방문 상세 정보</h2>
 
-<h2>방문 상세 정보</h2>
+    <table>
+        <!-- ✅ 가족 이름 + 관계 -->
+        <tr>
+            <th>가족 구성원</th>
+            <td th:text="${dto.member_name + ' (' + dto.member_relation + ')'}"></td>
+        </tr>
+        <tr>
+            <th>병원명</th>
+            <td th:text="${dto.hospital_name}"></td>
+        </tr>
+        <tr>
+            <th>진료과</th>
+            <td th:text="${dto.department}"></td>
+        </tr>
+        <tr>
+            <th>방문 날짜</th>
+            <td th:text="${dto.visit_date}"></td>
+        </tr>
+        <tr>
+            <th>비용</th>
+            <td th:text="${dto.cost} + ' 원'"></td>
+        </tr>
+        <tr>
+            <th>진단 내용</th>
+            <td th:text="${dto.diagnosis} ?: '등록되지 않음'"></td>
+        </tr>
+    </table>
 
-<table>
-    <tr>
-        <th>방문 ID</th>
-        <td th:text="${dto.visit_id}"></td>
-    </tr>
-    <tr>
-        <th>가족 구성원</th>
-        <td th:text="${dto.member_id}"></td>
-    </tr>
-    <tr>
-        <th>병원명</th>
-        <td th:text="${dto.hospital_name}"></td>
-    </tr>
-    <tr>
-        <th>진료과</th>
-        <td th:text="${dto.department}"></td>
-    </tr>
-    <tr>
-        <th>방문 날짜</th>
-        <td th:text="${dto.visit_date}"></td>
-    </tr>
-    <tr>
-        <th>비용</th>
-        <td th:text="${dto.cost}"></td>
-    </tr>
-    <tr>
-        <th>진단 내용</th>
-        <td th:text="${dto.diagnosis} ?: '등록되지 않음'"></td>
-    </tr>
-</table>
+    <div class="commu-section">
+        <h2>가족 커뮤니케이션 기록</h2>
 
+        <!-- 작성 폼 -->
+        <form class="log-form" th:action="@{/commu/insert}" method="post">
+            <input type="hidden" name="visit_id" th:value="${dto.visit_id}">
+            <p>작성자: <input type="text" name="writer" placeholder="이름 입력" required></p>
+            <textarea name="content" placeholder="가족에게 공유할 내용을 입력하세요." required></textarea><br>
+            <button type="submit">등록</button>
+        </form>
 
-<div class="commu-section">
-    <h2>가족 커뮤니케이션 기록</h2>
+        <!-- 로그 목록 -->
+        <div th:if="${#lists.isEmpty(logList)}">
+            <p style="color:#777;">등록된 커뮤니케이션 기록이 없습니다.</p>
+        </div>
 
-    <!-- 로그 작성 폼 -->
-    <form th:action="@{/commu/insert}" method="post">
-        <input type="hidden" name="visit_id" th:value="${dto.visit_id}">
-        <p>작성자: <input type="text" name="writer" required></p>
-        <p>내용:</p>
-        <textarea name="content" placeholder="가족에게 공유할 진료 요약, 복약 안내 등을 작성하세요." required></textarea><br>
-        <button type="submit">등록</button>
-    </form>
-
-    <hr>
-
-    <!-- 로그 목록 -->
-    <div th:if="${#lists.isEmpty(logList)}">
-        <p>등록된 커뮤니케이션 기록이 없습니다.</p>
+        <div th:each="log : ${logList}" class="log-box">
+            <div class="log-writer" th:text="${log.writer}"></div>
+            <div class="log-time" th:text="${#temporals.format(log.created_at, 'yyyy-MM-dd HH:mm')}"></div>
+            <div class="log-content" th:text="${log.content}"></div>
+        </div>
     </div>
 
-    <div th:each="log : ${logList}" class="log-box">
-        <div class="log-writer" th:text="${log.writer}"></div>
-        <div class="log-time" th:text="${#temporals.format(log.created_at, 'yyyy-MM-dd HH:mm')}"></div>
-        <div class="log-content" th:text="${log.content}"></div>
+    <div class="btn-group">
+        <a th:href="@{/visit/list(year=${year}, month=${month}, day=${day})}" class="btn-secondary">목록으로</a>
+        <a th:href="@{/calendar}" class="btn-outline-primary">달력으로</a>
     </div>
 </div>
-<div class="btn-group">
-  <a th:href="@{/visit/list}" class="btn btn-secondary">목록으로</a>
-  <a th:href="@{/calendar}" class="btn btn-outline-primary">달력으로</a>
-</div>
-
 </body>
 </html>

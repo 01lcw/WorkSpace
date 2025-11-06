@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>방문 기록 목록</title>
+<style>
+body { font-family: '맑은 고딕', sans-serif; background-color: #f9fafc; }
+.container { width: 900px; margin: 40px auto; background: #fff; padding: 20px;
+             border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+h2 { text-align: center; color: #333; margin-bottom: 20px; }
+.table {
+    width: 100%; border-collapse: collapse;
+}
+.table th, .table td {
+    border-bottom: 1px solid #eee; padding: 10px; text-align: center;
+}
+.table th { background-color: #f3f6fb; color: #333; }
+.btn-area { text-align: right; margin-bottom: 10px; }
+button {
+    padding: 8px 16px; border: none; background-color: #4b89dc;
+    color: white; border-radius: 6px; cursor: pointer;
+}
+button:hover { background-color: #3a73bd; }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>
+        <span th:if="${selectedDate != null}" 
+              th:text="${selectedDate} + ' 방문 기록'"></span>
+        <span th:unless="${selectedDate != null}">전체 방문 기록</span>
+    </h2>
+
+    <div class="btn-area">
+        <button onclick="location.href='/calendar'">달력으로 돌아가기</button>
+        <button th:onclick="|location.href='/visit/insertForm?year=${year}&month=${month}&day=${day}'|">
+    				새 방문 등록
+		</button>
+
+    </div>
+
+    <table class="table">
+        <thead>
+			  <tr>
+			    <th>이름</th>
+			    <th>관계</th>
+			    <th>병원명</th>
+			    <th>진료과</th>
+			    <th>방문일</th>
+			    <th>비용(원)</th>
+			    <th>진단내용</th>
+			    <th>관리</th>
+			  </tr>
+			</thead>
+			
+			<tbody>
+			  <tr th:each="v : ${list}">
+			    <td th:text="${v.member_name}"></td>
+			    <td th:text="${v.member_relation}"></td>
+			    <td th:text="${v.hospital_name}"></td>
+			    <td th:text="${v.department}"></td>
+			    <td th:text="${v.visit_date}"></td>
+			    <td th:text="${v.cost}"></td>
+			    <td th:text="${v.diagnosis}"></td>
+			    <td>
+			      <a th:href="@{/visit/detail(visit_id=${v.visit_id})}">상세</a> |
+			      <a th:href="@{/visit/delete(visit_id=${v.visit_id})}"
+			         onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+			    </td>
+			  </tr>
+			</tbody>
+
+    </table>
+</div>
+</body>
+</html>

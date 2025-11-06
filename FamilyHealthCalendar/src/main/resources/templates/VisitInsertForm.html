@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>가족 병원 방문 등록</title>
+<style>
+body { 
+    font-family: '맑은 고딕', sans-serif; 
+    background-color: #f7f9fc; 
+}
+.container {
+    width: 600px; margin: 40px auto; padding: 20px;
+    background: #fff; border-radius: 12px; 
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+h2 { 
+    text-align: center; 
+    margin-bottom: 25px; 
+    color: #333; 
+}
+form table { 
+    width: 90%; 
+    border-collapse: collapse; 
+    margin: 0 auto; 
+}
+th { 
+    width: 25%; 
+    text-align: right; 
+    padding: 10px; 
+    color: #555; 
+    vertical-align: middle;
+}
+td { 
+    padding: 10px; 
+}
+input, textarea, select {
+    width: 100%; 
+    padding: 8px; 
+    border: 1px solid #ccc; 
+    border-radius: 6px; 
+    box-sizing: border-box;
+    font-size: 15px;
+}
+textarea { 
+    resize: vertical; 
+    min-height: 80px;
+}
+.btns { 
+    text-align: center; 
+    margin-top: 25px; 
+}
+button {
+    padding: 8px 20px; 
+    margin: 0 10px; 
+    border: none; 
+    border-radius: 6px; 
+    background-color: #4b89dc;
+    color: white; 
+    cursor: pointer; 
+    font-size: 15px;
+    transition: background-color 0.2s ease;
+}
+button:hover { background-color: #3b74c4; }
+.cancel-btn { background-color: #6c757d; }
+.cancel-btn:hover { background-color: #5a6268; }
+</style>
+</head>
+
+<body>
+<div class="container">
+    <h2>가족 병원 방문 등록</h2>
+
+    <form th:action="@{/visit/insert}" method="post" th:object="${visit}">
+        <table>
+            <!-- ✅ 가족 구성원 선택 -->
+            <tr>
+                <th>가족 구성원</th>
+                <td>
+                    <select name="member_id" required>
+                        <option value="">-- 가족 구성원을 선택하세요 --</option>
+                        <option th:each="m : ${members}"
+                                th:value="${m.member_id}"
+                                th:text="${m.name + ' (' + m.relation + ')'}"></option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <th>병원명</th>
+                <td><input type="text" name="hospital_name" placeholder="예: 서울의료원" required></td>
+            </tr>
+
+            <tr>
+                <th>진료과</th>
+                <td><input type="text" name="department" placeholder="예: 내과, 정형외과"></td>
+            </tr>
+
+            <tr>
+                <th>방문일</th>
+                <td>
+                    <input type="date" name="visit_date"
+                           th:value="${selectedDate != null ? selectedDate : ''}" required>
+                </td>
+            </tr>
+
+            <tr>
+                <th>비용(원)</th>
+                <td><input type="number" name="cost" placeholder="예: 15000"></td>
+            </tr>
+
+            <tr>
+                <th>진단 내용</th>
+                <td><textarea name="diagnosis" placeholder="진단 내용 입력..."></textarea></td>
+            </tr>
+        </table>
+
+        <div class="btns">
+            <button type="submit">등록</button>
+            <button type="button" class="cancel-btn" onclick="location.href='/calendar'">취소</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

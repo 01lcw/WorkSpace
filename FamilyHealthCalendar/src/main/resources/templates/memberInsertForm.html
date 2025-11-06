@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>가족 구성원 목록</title>
+<style>
+body { font-family: '맑은 고딕'; background: #f8f9fb; margin: 20px; }
+table { border-collapse: collapse; width: 70%; background: white; margin: auto; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+th { background: #3a6ea5; color: white; }
+a.btn { background: #3a6ea5; color: white; padding: 8px 12px; border-radius: 6px; text-decoration: none; }
+a.btn:hover { background: #2f5585; }
+</style>
+</head>
+<body>
+
+<h2 style="text-align:center; color:#3a6ea5;">가족 구성원 목록</h2>
+
+<table>
+  <tr>
+    <th>이름</th><th>관계</th><th>생년월일</th><th>성별</th><th>관리</th>
+  </tr>
+  <tr th:each="m : ${members}">
+    <td th:text="${m.name}"></td>
+    <td th:text="${m.relation}"></td>
+    <td th:text="${m.birth_date}"></td>
+    <td th:text="${m.gender}"></td>
+    <td>
+      <a th:href="@{/member/updateForm(member_id=${m.member_id})}">수정</a> |
+      <a th:href="@{/member/delete(member_id=${m.member_id})}">삭제</a>
+    </td>
+  </tr>
+</table>
+
+<div style="text-align:center; margin-top:20px;">
+  <a th:href="@{/member/insertForm}" class="btn">+ 가족 추가</a>
+  <a th:href="@{/calendar}" class="btn" style="background:#6c757d;">달력으로</a>
+</div>
+
+</body>
+</html>

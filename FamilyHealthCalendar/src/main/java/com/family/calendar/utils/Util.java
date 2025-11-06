@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 import com.family.calendar.dtos.VisitDto;
 
@@ -54,27 +56,39 @@ public class Util {
 
         return visitList.toString();
     }
-    public String getCalViewList(int day, List<VisitDto> vlist, int year, int month) {
+    public String getCalViewList(int day, List<VisitDto> list, int year, int month) {
         StringBuilder sb = new StringBuilder();
+        List<VisitDto> dailyList = list.stream()
+            .filter(v -> v.getVisit_date().equals(LocalDate.of(year, month, day)))
+            .collect(Collectors.toList());
 
-        String yStr = String.valueOf(year);
-        String mStr = (month < 10 ? "0" + month : String.valueOf(month));
-        String dStr = (day < 10 ? "0" + day : String.valueOf(day));
+        int count = 0;
+        StringBuilder tooltip = new StringBuilder(); // 툴팁 전체 목록
 
-        String target = yStr + "-" + mStr + "-" + dStr; // yyyy-MM-dd 형식
-
-        for (VisitDto dto : vlist) {
-            if (dto.getVisit_date() != null) {
-                String visitDate = dto.getVisit_date().toString().substring(0, 10);
-                if (visitDate.equals(target)) {
-                    sb.append("<div class='visit-item'>")
-                      .append(dto.getHospital_name())
-                      .append("</div>");
-                }
+        for (VisitDto v : dailyList) {
+            tooltip.append(v.getMember_name())
+                   .append(" (").append(v.getMember_relation()).append(")\n");
+            if (count < 2) { // 최대 2개까지만 표시
+                sb.append(v.getMember_name())
+                  .append(" (").append(v.getMember_relation()).append(")<br>");
             }
+            count++;
         }
-        return sb.toString();
+
+        if (count > 2) {
+            sb.append("외 ").append(count - 2).append("건...");
+        }
+
+        // 🔹 최종 HTML (툴팁 포함)
+        if (count > 0) {
+            return String.format("<div title='%s'>%s</div>",
+                    tooltip.toString().trim(), sb.toString());
+        } else {
+            return "";
+        }
     }
+
+
 
     
     
