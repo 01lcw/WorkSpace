@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>다음 진료 예약 상세</title>
+<style>
+body {
+	font-family: '맑은 고딕';
+	background-color: #f9fafc;
+	margin: 0;
+	padding: 40px 0;
+}
+.container {
+	width: 700px;
+	margin: 0 auto;
+	background: #fff;
+	padding: 25px 40px;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+h2 {
+	color: #2f5dae;
+	border-bottom: 2px solid #d8e4f8;
+	padding-bottom: 10px;
+	margin-bottom: 25px;
+}
+table {
+	border-collapse: collapse;
+	width: 100%;
+	margin-bottom: 20px;
+}
+th, td {
+	border-bottom: 1px solid #eee;
+	padding: 10px 15px;
+	text-align: left;
+}
+th {
+	width: 25%;
+	background-color: #f3f6fb;
+	color: #333;
+	font-weight: 600;
+}
+.btn {
+	display: inline-block;
+	padding: 8px 14px;
+	margin-top: 15px;
+	border-radius: 6px;
+	text-decoration: none;
+	font-size: 0.9rem;
+}
+.btn-back {
+	background-color: #4b89dc;
+	color: white;
+}
+.btn-back:hover { background-color: #3b74c4; }
+
+.info-label {
+	color: #666;
+	font-size: 0.9rem;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+	<h2>다음 진료 예약 상세</h2>
+
+	<table>
+		<tr>
+	<th>작성자</th>
+	<td th:text="${dto.id}">작성자</td>
+</tr>
+<tr>
+	<th>병원명</th>
+	<td th:text="${dto.title}">병원명</td>
+</tr>
+<tr>
+	<th>진료과</th>
+	<td th:text="${dto.extraInfo != null ? dto.extraInfo : '미입력'}">진료과</td>
+</tr>
+<tr>
+	<th>예약일자</th>
+	<td th:text="${dto.mdate}">예약일자</td>
+</tr>
+<tr>
+	<th>메모</th>
+	<td th:text="${dto.content != null ? dto.content : '내용 없음'}">메모</td>
+</tr>
+
+	</table>
+
+	<a th:href="@{/calendar}" class="btn btn-back">달력으로 돌아가기</a>
+</div>
+</body>
+</html>

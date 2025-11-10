@@ -3,7 +3,6 @@ package com.family.calendar.service;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.family.calendar.dtos.FamilyMemberDto;
 import com.family.calendar.mapper.FamilyMemberMapper;
 
@@ -14,7 +13,7 @@ public class FamilyMemberServiceImp implements FamilyMemberService {
     private FamilyMemberMapper mapper;
 
     @Override
-    public List<FamilyMemberDto> getMembersByUser(Long user_id) {
+    public List<FamilyMemberDto> getMembersByUser(int user_id) {
         return mapper.getMembersByUser(user_id);
     }
 
@@ -23,10 +22,8 @@ public class FamilyMemberServiceImp implements FamilyMemberService {
         return mapper.getMemberDetail(member_id);
     }
 
-    // ✅ 로그인한 user_id도 함께 받아서 저장
     @Override
-    public void insertMember(FamilyMemberDto dto, Long user_id) {
-        dto.setUser_id(user_id); // 로그인 사용자 ID 세팅
+    public void insertMember(FamilyMemberDto dto) {
         mapper.insertMember(dto);
     }
 

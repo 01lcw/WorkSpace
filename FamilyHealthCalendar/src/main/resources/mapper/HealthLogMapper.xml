@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.family.calendar.mapper.HealthLogMapper">
+
+  <select id="getAllLogs" resultType="com.family.calendar.dtos.HealthLogDto">
+    SELECT *
+    FROM healthlog
+    ORDER BY record_date DESC
+  </select>
+
+  <select id="getLogsByVisit" resultType="com.family.calendar.dtos.HealthLogDto">
+    SELECT *
+    FROM healthlog
+    WHERE visit_id = #{visit_id}
+    ORDER BY record_date DESC
+  </select>
+
+  <select id="getLogsByMember" resultType="com.family.calendar.dtos.HealthLogDto">
+    SELECT *
+    FROM healthlog
+    WHERE member_id = #{member_id}
+    ORDER BY record_date DESC
+  </select>
+
+  <select id="getLogDetail" resultType="com.family.calendar.dtos.HealthLogDto">
+    SELECT *
+    FROM healthlog
+    WHERE log_id = #{log_id}
+  </select>
+
+  <insert id="insertLog" parameterType="com.family.calendar.dtos.HealthLogDto">
+    INSERT INTO healthlog
+    (visit_id, member_id, type, title, content, extra_info, target_date, record_date, writer)
+    VALUES
+    (#{visit_id}, #{member_id}, #{type}, #{title}, #{content},
+     #{extra_info}, #{target_date}, NOW(), #{writer})
+  </insert>
+
+  <update id="updateLog" parameterType="com.family.calendar.dtos.HealthLogDto">
+    UPDATE healthlog
+    SET type = #{type},
+        title = #{title},
+        content = #{content},
+        extra_info = #{extra_info},
+        target_date = #{target_date}
+    WHERE log_id = #{log_id}
+  </update>
+
+  <delete id="deleteLog" parameterType="int">
+    DELETE FROM healthlog WHERE log_id = #{log_id}
+  </delete>
+
+  <select id="getLogsByType" resultType="com.family.calendar.dtos.HealthLogDto">
+    SELECT *
+    FROM healthlog
+    WHERE type = #{type}
+    <if test="member_id != null">
+      AND member_id = #{member_id}
+    </if>
+    ORDER BY target_date ASC, record_date DESC
+  </select>
+
+</mapper>

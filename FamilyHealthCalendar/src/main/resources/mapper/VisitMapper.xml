@@ -1,80 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.family.calendar.mapper.VisitMapper">
 
-    <!-- 전체 방문 목록 -->
-    <select id="getVisitList" resultType="com.family.calendar.dtos.VisitDto">
-        SELECT visit_id, member_id, hospital_name, department, visit_date, cost, diagnosis
-        FROM visit
-        ORDER BY visit_date DESC;
-    </select>
-
-    <!-- ✅ 방문 상세 (로그인 사용자 기준) -->
-    <select id="getVisitDetail" parameterType="map" resultType="com.family.calendar.dtos.VisitDto">
-    SELECT 
-        v.visit_id,
-        v.member_id,
-        v.hospital_name,
-        v.department,
-        v.visit_date,
-        v.cost,
-        v.diagnosis,
-        f.name AS member_name,
-        f.relation AS member_relation
-    FROM visit v
-    JOIN family_member f ON v.member_id = f.member_id
-    WHERE v.visit_id = #{visit_id}
-    <if test="userId != null">
-        AND f.user_id = #{userId}
-    </if>
-</select>
-
-
-    <!-- 방문 등록 -->
-    <insert id="insertVisit" parameterType="com.family.calendar.dtos.VisitDto">
-        INSERT INTO visit (member_id, hospital_name, department, visit_date, cost, diagnosis)
-        VALUES (#{member_id}, #{hospital_name}, #{department}, #{visit_date}, #{cost}, #{diagnosis});
-    </insert>
-
-    <!-- 방문 수정 -->
-    <update id="updateVisit" parameterType="com.family.calendar.dtos.VisitDto">
-        UPDATE visit
-        SET hospital_name = #{hospital_name},
-            department = #{department},
-            visit_date = #{visit_date},
-            cost = #{cost},
-            diagnosis = #{diagnosis}
-        WHERE visit_id = #{visit_id};
-    </update>
-
-    <!-- 방문 삭제 -->
-    <delete id="deleteVisit" parameterType="long">
-        DELETE FROM visit WHERE visit_id = #{visit_id};
-    </delete>
-
-    <!-- 날짜별 조회 -->
-    <select id="getVisitListByDate" resultType="com.family.calendar.dtos.VisitDto">
-        SELECT *
-        FROM visit
-        WHERE DATE(visit_date) = #{date}
-        ORDER BY visit_date ASC;
-    </select>
-
-    <!-- 날짜별 방문 수 -->
-    <select id="getVisitCountByDate" resultType="int">
-        SELECT COUNT(*) 
-        FROM visit 
-        WHERE DATE_FORMAT(visit_date, '%Y%m%d') = #{yyyyMMdd};
-    </select>
-
-    <!-- ✅ 사용자별 방문 기록 -->
-    <select id="getVisitListByUser" parameterType="long" resultType="com.family.calendar.dtos.VisitDto">
+    <!-- 📌 모든 방문 목록 조회 (특정 사용자 기준) -->
+    <select id="getVisitListByUser" parameterType="int" resultType="com.family.calendar.dtos.VisitDto">
         SELECT 
             v.visit_id,
             v.member_id,
+            f.user_id,                                   -- ✅ user_id는 family_member에서 가져옴
             v.hospital_name,
             v.department,
             v.visit_date,
@@ -85,14 +20,26 @@
         FROM visit v
         JOIN family_member f ON v.member_id = f.member_id
         WHERE f.user_id = #{userId}
-        ORDER BY v.visit_date DESC;
+        ORDER BY v.visit_date DESC
     </select>
 
-    <!-- ✅ 날짜 + 사용자 기준 방문 조회 -->
-    <select id="getVisitListByDateAndUser" resultType="com.family.calendar.dtos.VisitDto">
+
+    <!-- 📌 특정 날짜별 방문 수 조회 (달력용) -->
+    <select id="getVisitCountByDateAndUser" parameterType="map" resultType="int">
+        SELECT COUNT(*) 
+        FROM visit v
+        JOIN family_member f ON v.member_id = f.member_id
+        WHERE f.user_id = #{userId}
+          AND DATE_FORMAT(v.visit_date, '%Y%m%d') = #{yyyyMMdd}
+    </select>
+
+
+    <!-- 📌 방문 상세 조회 -->
+    <select id="getVisitDetail" parameterType="int" resultType="com.family.calendar.dtos.VisitDto">
         SELECT 
             v.visit_id,
             v.member_id,
+            f.user_id,
             v.hospital_name,
             v.department,
             v.visit_date,
@@ -102,20 +49,35 @@
             f.relation AS member_relation
         FROM visit v
         JOIN family_member f ON v.member_id = f.member_id
-        WHERE DATE(v.visit_date) = #{date}
-          AND f.user_id = #{userId}
-        ORDER BY v.visit_date ASC;
+        WHERE v.visit_id = #{visit_id}
     </select>
 
-    <!-- ✅ 날짜 + 사용자 기준 방문 수 -->
-    <select id="getVisitCountByDateAndUser" resultType="int">
-        SELECT COUNT(*)
-        FROM visit v
-        JOIN family_member f ON v.member_id = f.member_id
-        WHERE DATE_FORMAT(v.visit_date, '%Y%m%d') = #{yyyyMMdd}
-          AND f.user_id = #{userId};
-    </select>
-    
-    
+
+    <!-- 📌 새 방문 등록 -->
+    <insert id="insertVisit" parameterType="com.family.calendar.dtos.VisitDto">
+        INSERT INTO visit (
+            member_id, hospital_name, department, visit_date, cost, diagnosis
+        ) VALUES (
+            #{memberId}, #{hospitalName}, #{department}, #{visitDate}, #{cost}, #{diagnosis}
+        )
+    </insert>
+
+
+    <!-- 📌 방문 수정 -->
+    <update id="updateVisit" parameterType="com.family.calendar.dtos.VisitDto">
+        UPDATE visit
+        SET hospital_name = #{hospitalName},
+            department = #{department},
+            visit_date = #{visitDate},
+            cost = #{cost},
+            diagnosis = #{diagnosis}
+        WHERE visit_id = #{visitId}
+    </update>
+
+
+    <!-- 📌 방문 삭제 -->
+    <delete id="deleteVisit" parameterType="int">
+        DELETE FROM visit WHERE visit_id = #{visit_id}
+    </delete>
 
 </mapper>

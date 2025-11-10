@@ -12,15 +12,13 @@ import java.time.LocalDate;
 @Builder
 public class VisitDto {
     private Long visit_id;
+    private int user_id;
     private Long member_id;
-    private String hospital_name;
-    private String department;
-    private LocalDate visit_date;
-    private Integer cost;
-    private String diagnosis;
-    private Long user_id;
     private String member_name;
     private String member_relation;
-
-
+    private String hospital_name;
+    private String department;
+    private String visit_date;
+    private int cost;
+    private String diagnosis;
 }

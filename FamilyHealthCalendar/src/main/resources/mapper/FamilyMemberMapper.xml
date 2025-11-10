@@ -5,48 +5,40 @@
 
 <mapper namespace="com.family.calendar.mapper.FamilyMemberMapper">
 
-    <!-- ✅ 사용자별 가족 구성원 목록 -->
-    <select id="getMembersByUser" parameterType="long" resultType="com.family.calendar.dtos.FamilyMemberDto">
-    SELECT * FROM family_member
-    WHERE user_id = #{user_id}
-    ORDER BY member_id DESC;
-</select>
+    <!-- 유저별 가족 구성원 전체 조회 -->
+    <select id="getMembersByUser" parameterType="int" resultType="com.family.calendar.dtos.FamilyMemberDto">
+        SELECT member_id, user_id, name, relation, birth_date, gender
+        FROM family_member
+        WHERE user_id = #{user_id}
+        ORDER BY member_id DESC
+    </select>
 
-
-    <!-- ✅ 구성원 상세 조회 -->
+    <!-- 가족 구성원 상세 조회 -->
     <select id="getMemberDetail" parameterType="long" resultType="com.family.calendar.dtos.FamilyMemberDto">
-        SELECT 
-            member_id,
-            user_id,
-            name,
-            relation,
-            birth_date,
-            gender
+        SELECT member_id, user_id, name, relation, birth_date, gender
         FROM family_member
         WHERE member_id = #{member_id}
     </select>
 
-    <!-- ✅ 구성원 추가 -->
+    <!-- 가족 구성원 등록 -->
     <insert id="insertMember" parameterType="com.family.calendar.dtos.FamilyMemberDto">
         INSERT INTO family_member (user_id, name, relation, birth_date, gender)
         VALUES (#{user_id}, #{name}, #{relation}, #{birth_date}, #{gender})
     </insert>
 
-    <!-- ✅ 구성원 수정 -->
+    <!-- 가족 구성원 수정 -->
     <update id="updateMember" parameterType="com.family.calendar.dtos.FamilyMemberDto">
         UPDATE family_member
-        SET 
-            name = #{name},
+        SET name = #{name},
             relation = #{relation},
             birth_date = #{birth_date},
             gender = #{gender}
         WHERE member_id = #{member_id}
     </update>
 
-    <!-- ✅ 구성원 삭제 -->
+    <!-- 가족 구성원 삭제 -->
     <delete id="deleteMember" parameterType="long">
-        DELETE FROM family_member
-        WHERE member_id = #{member_id}
+        DELETE FROM family_member WHERE member_id = #{member_id}
     </delete>
 
 </mapper>

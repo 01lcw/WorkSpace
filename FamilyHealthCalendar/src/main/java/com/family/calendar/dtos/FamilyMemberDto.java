@@ -12,9 +12,9 @@ import java.time.LocalDate;
 @Builder
 public class FamilyMemberDto {
     private Long member_id;
-    private Long user_id;
+    private int user_id;
     private String name;
     private String relation;
-    private LocalDate birth_date;
+    private String birth_date;
     private String gender;
 }

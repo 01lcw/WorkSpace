@@ -7,7 +7,7 @@ import com.family.calendar.dtos.FamilyMemberDto;
 @Mapper
 public interface FamilyMemberMapper {
 
-    List<FamilyMemberDto> getMembersByUser(Long user_id);
+    List<FamilyMemberDto> getMembersByUser(int user_id);
 
     FamilyMemberDto getMemberDetail(Long member_id);
 
