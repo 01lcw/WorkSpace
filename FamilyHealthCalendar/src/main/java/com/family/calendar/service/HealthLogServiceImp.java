@@ -54,4 +54,9 @@ public class HealthLogServiceImp implements HealthLogService {
     public List<HealthLogDto> getLogsByType(Map<String, Object> params) {
         return mapper.getLogsByType(params);
     }
+    @Override
+    public List<HealthLogDto> getLogsByVisit(int visit_id) {
+        return mapper.getLogsByVisit(visit_id);
+    }
+
 }

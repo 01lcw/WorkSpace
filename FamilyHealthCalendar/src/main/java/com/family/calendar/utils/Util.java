@@ -11,12 +11,14 @@ public class Util {
     public String getCalViewList(int day, List<VisitDto> list, int year, int month) {
         StringBuilder sb = new StringBuilder();
         String date = String.format("%04d-%02d-%02d", year, month, day);
+
         for (VisitDto v : list) {
             if (v.getVisit_date() != null && v.getVisit_date().startsWith(date)) {
-                sb.append("<p>")
-                  .append(v.getHospital_name())
+                sb.append("<p style='background-color:#ffae00;color:white;"
+                        + "border-radius:6px;padding:2px 4px;margin:2px 0;'>")
+                  .append(v.getMember_name())
                   .append(" (")
-                  .append(v.getDepartment() == null ? "" : v.getDepartment())
+                  .append(v.getMember_relation() == null ? "" : v.getMember_relation())
                   .append(")</p>");
             }
         }

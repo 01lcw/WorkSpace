@@ -25,4 +25,7 @@ public interface HealthLogMapper {
     int deleteLog(int log_id);
 
     List<HealthLogDto> getLogsByType(Map<String, Object> params);
+    
+    List<HealthLogDto> getLogsByVisit(int visit_id);
+
 }

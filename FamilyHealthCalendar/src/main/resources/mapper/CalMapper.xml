@@ -33,5 +33,16 @@
     <delete id="deleteCal" parameterType="int">
         DELETE FROM calendar WHERE seq = #{seq}
     </delete>
+    
+    <select id="getVisitListByUser" parameterType="int" resultType="com.family.calendar.dtos.VisitDto">
+    SELECT 
+        v.*, 
+        f.name AS member_name, 
+        f.relation AS member_relation
+    FROM visit v
+    JOIN family_member f ON v.member_id = f.member_id
+    WHERE f.user_id = #{user_id}
+</select>
+
 
 </mapper>

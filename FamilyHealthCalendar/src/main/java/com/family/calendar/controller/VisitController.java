@@ -8,6 +8,10 @@ import com.family.calendar.dtos.VisitDto;
 import com.family.calendar.service.VisitService;
 import com.family.calendar.service.FamilyMemberService;
 import java.time.LocalDate;
+import java.util.List;
+import com.family.calendar.dtos.HealthLogDto;
+import com.family.calendar.service.HealthLogService;
+
 import jakarta.servlet.http.HttpSession;
 import com.family.calendar.dtos.UserDto;
 
@@ -20,6 +24,10 @@ public class VisitController {
 
     @Autowired
     private FamilyMemberService memberService;
+    
+    @Autowired
+    private HealthLogService healthLogService;
+
 
     @GetMapping("/list")
     public String list(@RequestParam(required = false) Integer year,
@@ -66,10 +74,17 @@ public class VisitController {
     }
 
     @GetMapping("/detail")
-    public String detail(@RequestParam("visit_id") int visit_id, Model model) {
-        model.addAttribute("dto", visitService.getVisitDetail(visit_id));
-        return "VisitDetail";
+    public String detail(@RequestParam int visit_id, Model model) {
+        VisitDto dto = visitService.getVisitDetail(visit_id);
+        model.addAttribute("dto", dto);
+
+        // ✅ 건강기록 목록 추가
+        List<HealthLogDto> logList = healthLogService.getLogsByVisit(visit_id);
+        model.addAttribute("logList", logList);
+
+        return "visitDetail";
     }
+
 
     @GetMapping("/delete")
     public String delete(@RequestParam("visit_id") int visit_id) {

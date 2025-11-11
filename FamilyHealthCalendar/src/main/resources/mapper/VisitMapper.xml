@@ -55,12 +55,13 @@
 
     <!-- 📌 새 방문 등록 -->
     <insert id="insertVisit" parameterType="com.family.calendar.dtos.VisitDto">
-        INSERT INTO visit (
-            member_id, hospital_name, department, visit_date, cost, diagnosis
-        ) VALUES (
-            #{memberId}, #{hospitalName}, #{department}, #{visitDate}, #{cost}, #{diagnosis}
-        )
-    </insert>
+    INSERT INTO visit (
+        member_id, hospital_name, department, visit_date, cost, diagnosis
+    ) VALUES (
+        #{member_id}, #{hospital_name}, #{department}, #{visit_date}, #{cost}, #{diagnosis}
+    )
+</insert>
+
 
 
     <!-- 📌 방문 수정 -->

@@ -21,4 +21,6 @@ public interface HealthLogService {
     boolean deleteLog(int log_id);
 
     List<HealthLogDto> getLogsByType(Map<String, Object> params);
+    public List<HealthLogDto> getLogsByVisit(int visit_id);
+
 }

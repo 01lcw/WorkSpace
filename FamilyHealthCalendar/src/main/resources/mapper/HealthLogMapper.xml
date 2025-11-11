@@ -7,32 +7,33 @@
 
   <select id="getAllLogs" resultType="com.family.calendar.dtos.HealthLogDto">
     SELECT *
-    FROM healthlog
+    FROM health_log
     ORDER BY record_date DESC
   </select>
 
-  <select id="getLogsByVisit" resultType="com.family.calendar.dtos.HealthLogDto">
-    SELECT *
-    FROM healthlog
+  <select id="getLogsByVisit" parameterType="int" resultType="com.family.calendar.dtos.HealthLogDto">
+    SELECT * 
+    FROM health_log 
     WHERE visit_id = #{visit_id}
     ORDER BY record_date DESC
-  </select>
+</select>
+
 
   <select id="getLogsByMember" resultType="com.family.calendar.dtos.HealthLogDto">
     SELECT *
-    FROM healthlog
+    FROM health_log
     WHERE member_id = #{member_id}
     ORDER BY record_date DESC
   </select>
 
   <select id="getLogDetail" resultType="com.family.calendar.dtos.HealthLogDto">
     SELECT *
-    FROM healthlog
+    FROM health_log
     WHERE log_id = #{log_id}
   </select>
 
   <insert id="insertLog" parameterType="com.family.calendar.dtos.HealthLogDto">
-    INSERT INTO healthlog
+    INSERT INTO health_log
     (visit_id, member_id, type, title, content, extra_info, target_date, record_date, writer)
     VALUES
     (#{visit_id}, #{member_id}, #{type}, #{title}, #{content},
@@ -40,7 +41,7 @@
   </insert>
 
   <update id="updateLog" parameterType="com.family.calendar.dtos.HealthLogDto">
-    UPDATE healthlog
+    UPDATE health_log
     SET type = #{type},
         title = #{title},
         content = #{content},
@@ -50,17 +51,20 @@
   </update>
 
   <delete id="deleteLog" parameterType="int">
-    DELETE FROM healthlog WHERE log_id = #{log_id}
+    DELETE FROM health_log WHERE log_id = #{log_id}
   </delete>
 
   <select id="getLogsByType" resultType="com.family.calendar.dtos.HealthLogDto">
     SELECT *
-    FROM healthlog
+    FROM health_log
     WHERE type = #{type}
     <if test="member_id != null">
       AND member_id = #{member_id}
     </if>
     ORDER BY target_date ASC, record_date DESC
   </select>
+  
+  
+  
 
 </mapper>

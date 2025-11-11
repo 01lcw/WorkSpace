@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.family.calendar.command.InsertCalCommand;
 import com.family.calendar.dtos.CalendarDto;
+import com.family.calendar.dtos.VisitDto;
 
 @Mapper
 public interface CalMapper {
@@ -14,4 +15,6 @@ public interface CalMapper {
     CalendarDto getCalDetail(int seq);
     boolean updateCal(CalendarDto dto);
     boolean deleteCal(int seq);
+    List<VisitDto> getVisitListByUser(int user_id);
+
 }
